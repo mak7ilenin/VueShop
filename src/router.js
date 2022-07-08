@@ -9,6 +9,10 @@ const routes = [
     {
         path: '/groceries',
         component: () => import('@/views/Groceries.vue')
+    },
+    {
+        path: '/registration',
+        component: () => import('@/views/Registration.vue')
     }
 ];
 const router = createRouter({

@@ -15,11 +15,29 @@
         </div>
         <div class="header__profile">
             <div class="profile__img">
-                <img src="../assets/profile.png" alt="profile">
+                <img src="../assets/profile.png" alt="profile" @click="openProfileDropdown">
             </div>
+        </div>
+        <div class="profile__dropdown">
+            <ul>
+                <li>My profile</li>
+                <router-link to="/registration"><li>Sign up</li></router-link>
+                <li>Log in</li>
+                <li class="sign-out">Sign out</li>
+            </ul>
         </div>
     </header>
 </template>
+
+<script>
+export default {
+    methods: {
+        openProfileDropdown() {
+            $('.profile__dropdown').toggle('active');
+        }
+    }
+}
+</script>
 
 <style>
 header {
@@ -76,6 +94,45 @@ header {
     padding: 6px;
     border-radius: 50%;
     border: 2px solid #000;
+    transition: all .2s;
     cursor: pointer;
+}
+.profile__img img:hover {
+    transform: scale(1.02);
+}
+.profile__dropdown {
+    width: 250px;
+    display: none;
+    background-color: #4b6e91;
+    position: absolute;
+    right: 70px;
+    top: 100px;
+}
+.active {
+    display: unset;
+}
+.profile__dropdown ul {
+    margin: 0;
+}
+.profile__dropdown ul li {
+    font-size: 20px;
+    color: #fff;
+    margin: 5px auto;
+    background-color: #1b2d41;
+    padding: 10px;
+    transition: all .05s;
+}
+.profile__dropdown ul li:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+.profile__dropdown > ul > li:nth-child(1) {
+    margin-top: 0;
+}
+.profile__dropdown > ul > li:nth-last-child(1) {
+    margin-bottom: 0;
+}
+.sign-out {
+    color: #ff5555 !important;
 }
 </style>
