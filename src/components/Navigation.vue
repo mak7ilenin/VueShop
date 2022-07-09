@@ -7,10 +7,10 @@
         </div>
         <div class="header__list">
             <ul>
-                <li><a>Buy</a></li>
-                <li><router-link to="/groceries">Groceries</router-link></li>
-                <li><a>About Us</a></li>
-                <li><a>Help</a></li>
+                <li><router-link to="/products">Products</router-link></li>
+                <li><router-link to="/addProduct">Add product</router-link></li>
+                <li><router-link to="/editProduct">Edit product</router-link></li>
+                <!-- <li><a>Help</a></li> -->
             </ul>
         </div>
         <div class="header__profile">

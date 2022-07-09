@@ -20,8 +20,8 @@ export default {
 <style>
 /* Remove Default */
 li {list-style: none} 
-ul {padding: 0}
-a {text-decoration: none; color: #fff;}
+ul {padding: 0; margin-bottom: 0;}
+a {text-decoration: none !important; color: #fff;}
 p, li {margin: 0;}
 /*  */
 body {

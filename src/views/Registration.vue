@@ -52,7 +52,7 @@ export default {
                     login: this.login,
                     password: this.password
                 }
-                localStorage.setItem('user', JSON.stringify(newUser));
+                // localStorage.setItem('user', JSON.stringify(newUser));
             }
         }
     }

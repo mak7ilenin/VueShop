@@ -1,7 +1,7 @@
 <template>
     <div class="welcome__container">
         <h1>Welcome to our store!</h1>
-        <router-link to="/groceries">Go to groceries</router-link>
+        <router-link to="/products">Go to the product list -></router-link>
     </div>
 </template>
 

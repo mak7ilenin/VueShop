@@ -7,12 +7,20 @@ const routes = [
         component: Home
     },
     {
-        path: '/groceries',
-        component: () => import('@/views/Groceries.vue')
+        path: '/products',
+        component: () => import('@/views/Products.vue')
     },
     {
         path: '/registration',
         component: () => import('@/views/Registration.vue')
+    },
+    {
+        path: '/addProduct',
+        component: () => import('@/views/AddProduct.vue')
+    },
+    {
+        path: '/editProduct',
+        component: () => import('@/views/EditProduct.vue')
     }
 ];
 const router = createRouter({
