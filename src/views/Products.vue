@@ -19,7 +19,32 @@
                     <span class="dollars">2.64</span><span class="currency">$</span>
                 </p>
                 <p class="item__desc">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Lorem ipsum dolor, sit amet consecte
+                    hic cumque.Lorem ipsum dolor, sit amet consecte
+                    Lorem ipsum dolor, sit amet consecte
+                    Lorem ipsum dolor, sit amet consecte
+                    Lorem ipsum dolor, sit amet consecte
+                    Lorem ipsum dolor, sit amet consecte
+                </p>
+            </div>
+            <div class="item__btns">
+                <a href="" class="cart-btn">Add to cart</a>
+                <a href="" class="buy-btn">Buy</a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="item__img">
+                <img src="@/assets/products/tomatoes-1296x728-feature.jpg" alt="">
+            </div>
+            <div class="item__info">
+                <h3>Tomatoes, 1kg</h3>
+                <p class="item__category">Food</p>
+                <p class="item__price">
+                    <!-- <span class="dollars">2</span><sup>64</sup><span class="currency">$</span> -->
+                    <span class="dollars">2.64</span><span class="currency">$</span>
+                </p>
+                <p class="item__desc">
+                    Lorem ipsum dolor, sit amet consecte
                 </p>
             </div>
             <div class="item__btns">
@@ -76,7 +101,7 @@ h2 {
 .items__container {
     width: 85%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
     margin: 50px auto;
     margin-top: 90px;
@@ -84,11 +109,12 @@ h2 {
 }
 .item {
     width: 350px;
+    height: auto;
     margin: 30px 0;
     border: 2px solid #88f3bd;
     box-shadow: 0 0 25px 0 #88f3be7c;
     border-radius: 4px;
-    display: flex;
+    /* display: flex; */
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
@@ -111,6 +137,8 @@ h2 {
 }
 .item__info {
     width: 100%;
+    min-height: 165.3px;
+    height: auto;
 }
 .item__info h3 {
     font-size: 24px;
@@ -146,8 +174,10 @@ h2 {
     font-weight: 400 !important;
 }
 .item__desc {
+    height: 82px;
+    overflow: hidden;
+    word-wrap: break-word;
     padding: 10px 15px;
-    padding-bottom: 0;
     text-align: center;
 }
 .item__btns {

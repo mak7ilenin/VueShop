@@ -25,9 +25,21 @@
             <label for="product-description">Description</label>
             <textarea class="form-control" id="product-description" rows="3" placeholder="Enter product description" v-model="description"></textarea>
 
-            <!-- <div class="custom-file">
-                <input type="file" class="custom-file-input" id="customFile">
-                <label class="custom-file-label" for="customFile">Choose file</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile" @change="selectFile">
+                <label class="custom-file-label" for="customFile" id="fileName">{{ fileName }}</label>
+            </div>
+            <!-- <div v-if="currentFile" class="progress">
+                <div
+                    class="progress-bar progress-bar-info progress-bar-striped"
+                    role="progressbar"
+                    :aria-valuenow="progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    :style="{ width: progress + '%' }"
+                >
+                    {{ progress }}%
+                </div>
             </div> -->
 
             <div class="submit-button">
@@ -38,6 +50,7 @@
 </template>
 
 <script>
+import UploadService from '@/services/UploadFilesService'
 export default {
     data() {
         return {
@@ -46,12 +59,40 @@ export default {
             price: '',
             weight: '',
             description: '',
-            // file: '',
+            // File
+            selectedFile: undefined,
+            currentFile: undefined,
+            progress: 0,
+            message: '',
+            fileInfos: [],
+            fileName: 'Choose file',
         }
     },
     methods: {
         sendProduct() {
             if(this.name.trim() && this.category.trim() && this.price !== 0 && this.weight !== 0) {
+
+                // File
+                this.progress = 0;
+                this.currentFile = this.selectedFile;
+                UploadService.upload(this.currentFilem, event => {
+                    this.progress = Math.round((100 * event.loaded) / event.total);
+                })
+                .then(response => {
+                    this.message = response.data.message;
+                    return UploadService.getFiles();
+                })
+                .then(files => {
+                    this.fileInfos = files.data;
+                })
+                .catch(() => {
+                    this.progress = 0;
+                    this.message = "Could not upload the file!";
+                    this.currentFile = undefined;
+                });
+                this.selectedFile = undefined;
+
+                // Product Object
                 const newProduct = {
                     id: Date.now(),
                     name: this.name,
@@ -59,6 +100,7 @@ export default {
                     price: this.price,
                     weight: this.weight,
                     description: this.description,
+                    fileName: this.fileName,
                 }
                 this.$emit('loadProducts', newProduct);
                 this.name = '',
@@ -70,9 +112,20 @@ export default {
         },
         closeForm() {
             $('#productForm').hide();
-        }
+        },
+        selectFile(event) {
+            let fileData = event.target.files[0];
+            this.fileName = fileData.name;
+            this.selectedFile = fileData;
+            console.log(this.fileName);
+        },
     },
-}
+    mounted() {
+        UploadService.getFiles().then(response => {
+            this.fileInfos = response.data;
+        });
+    }
+};
 </script>
 
 <style>
