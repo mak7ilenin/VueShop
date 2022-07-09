@@ -8,7 +8,7 @@
         <div class="header__list">
             <ul>
                 <li><router-link to="/products">Products</router-link></li>
-                <li><router-link to="/addProduct">Add product</router-link></li>
+                <!-- <li><router-link to="/addProduct">Add product</router-link></li> -->
                 <li><router-link to="/editProduct">Edit product</router-link></li>
                 <!-- <li><a>Help</a></li> -->
             </ul>
@@ -21,7 +21,7 @@
         <div class="profile__dropdown">
             <ul>
                 <li>My profile</li>
-                <router-link to="/registration"><li>Sign up</li></router-link>
+                <!-- <router-link to="/registration"><li>Sign up</li></router-link> -->
                 <li>Log in</li>
                 <li class="sign-out">Sign out</li>
             </ul>

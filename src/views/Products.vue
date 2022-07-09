@@ -1,5 +1,9 @@
 <template>
     <h2>Product list</h2>
+    <AddProduct
+        v-on:loadProducts="loadProducts"
+    />
+    <!-- <button @click="loadProducts">Load product list</button> -->
     <div class="items__container">
         <div class="item">
             <div class="item__img">
@@ -7,9 +11,10 @@
             </div>
             <div class="item__info">
                 <h3>Tomatoes, 1kg</h3>
-                <p class="item__category">Vegetables</p>
+                <p class="item__category">Food</p>
                 <p class="item__price">
-                    <span class="dollars">2</span><sup>64</sup><span class="currency">$</span>
+                    <!-- <span class="dollars">2</span><sup>64</sup><span class="currency">$</span> -->
+                    <span class="dollars">2.64</span><span class="currency">$</span>
                 </p>
                 <p class="item__desc">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -20,25 +25,34 @@
                 <a href="" class="buy-btn">Buy</a>
             </div>
         </div>
+        <ProductList
+            v-bind:products="products"
+        />
     </div>
 </template>
 
 <script>
-// import
+import AddProduct from '@/components/AddProduct'
+import ProductList from '@/components/ProductList'
 export default {
     data() {
         return {
-            product: {
-                name: '',
-                category: '',
-                price: '',
-                weight: '',
-                description: '',
-                file: '',
-            }
+            products: [
+                // {name: 'Test', category: 'Food', price: 2, weight: 1, description: 'nothing'},
+            ]
         }
+    },
+    components: {
+        AddProduct,
+        ProductList
+    },
+    methods: {
+        loadProducts(product) {
+            this.products.push(product);
+        },
     }
 }
+// console.log(products);
 </script>
 
 <style>
@@ -50,12 +64,16 @@ h2 {
 }
 .items__container {
     width: 85%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     margin: 50px auto;
     margin-top: 90px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
 }
 .item {
     width: 350px;
+    margin: 30px 0;
     border: 2px solid #88f3bd;
     box-shadow: 0 0 25px 0 #88f3be7c;
     border-radius: 4px;
