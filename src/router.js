@@ -16,7 +16,7 @@ const routes = [
     },
     // {
     //     path: '/addProduct',
-    //     component: () => import('@/views/AddProduct.vue')
+    //     component: () => import('@/views/ProductForm.vue')
     // },
     {
         path: '/editProduct',

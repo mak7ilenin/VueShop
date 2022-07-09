@@ -1,6 +1,6 @@
 <template>
-    <h2 class="add-product-heading">Product adding</h2>
-    <div class="form-group">
+    <div class="form-group" id="productForm">
+        <div class="close-form" @click="closeForm">&times;</div>
         <h3>New product</h3>
         <form class="add-product" @submit.prevent="sendProduct">
             <label for="product-name">Name</label>
@@ -67,12 +67,34 @@ export default {
                 this.weight = '',
                 this.description = ''
             }
+        },
+        closeForm() {
+            $('#productForm').hide();
         }
     },
 }
 </script>
 
 <style>
+#productForm {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    z-index: 999;
+    transform: translate(-50%, 0)
+}
+.close-form {
+    height: 40px;
+    width: 40px;
+    background-color: #ff0000;
+    position: absolute;
+    right: 0;
+    font-size: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 .form-group {
     width: 50%;
     height: 680px;

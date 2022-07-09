@@ -1,9 +1,11 @@
 <template>
     <h2>Product list</h2>
+    <button class="show-products" @click="show =! show">Add product</button>
     <AddProduct
-        v-on:loadProducts="loadProducts"
+        v-if="show"
+        @loadProducts="loadProducts"
     />
-    <!-- <button @click="loadProducts">Load product list</button> -->
+    <p v-else></p>
     <div class="items__container">
         <div class="item">
             <div class="item__img">
@@ -32,30 +34,39 @@
 </template>
 
 <script>
-import AddProduct from '@/components/AddProduct'
 import ProductList from '@/components/ProductList'
+import AddProduct from '@/components/AddProduct'
 export default {
     data() {
         return {
             products: [
                 // {name: 'Test', category: 'Food', price: 2, weight: 1, description: 'nothing'},
-            ]
+            ],
+            show: false
         }
     },
     components: {
+        ProductList,
         AddProduct,
-        ProductList
     },
     methods: {
         loadProducts(product) {
             this.products.push(product);
+            console.log(product);
         },
     }
 }
-// console.log(products);
 </script>
 
 <style>
+.show-products {
+    border: none;
+    border-radius: 5px;
+    padding: 2px 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
 h2 {
     font-size: 48px;
     letter-spacing: 2px;
