@@ -2,7 +2,7 @@
     <div class="form-group" id="productForm">
         <div class="close-form" @click="closeForm">&times;</div>
         <h3>New product</h3>
-        <form class="add-product" @submit.prevent="sendProduct">
+        <form class="add-product-form" @submit.prevent="sendProduct">
             <label for="product-name">Name</label>
             <input type="text" class="form-control" id="product-name" placeholder="Enter product name" v-model="name">
 
@@ -29,18 +29,6 @@
                 <input type="file" class="custom-file-input" id="customFile" @change="selectFile">
                 <label class="custom-file-label" for="customFile" id="fileName">{{ fileName }}</label>
             </div>
-            <!-- <div v-if="currentFile" class="progress">
-                <div
-                    class="progress-bar progress-bar-info progress-bar-striped"
-                    role="progressbar"
-                    :aria-valuenow="progress"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    :style="{ width: progress + '%' }"
-                >
-                    {{ progress }}%
-                </div>
-            </div> -->
 
             <div class="submit-button">
                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
@@ -50,7 +38,10 @@
 </template>
 
 <script>
-import UploadService from '@/services/UploadFilesService'
+// import { onMounted } from 'vue'
+// import { db } from '@/firebase/init'
+// import { collection, addDoc, getDocs } from "firebase/firestore"; 
+
 export default {
     data() {
         return {
@@ -72,36 +63,17 @@ export default {
         sendProduct() {
             if(this.name.trim() && this.category.trim() && this.price !== 0 && this.weight !== 0) {
 
-                // File
-                this.progress = 0;
-                this.currentFile = this.selectedFile;
-                UploadService.upload(this.currentFilem, event => {
-                    this.progress = Math.round((100 * event.loaded) / event.total);
-                })
-                .then(response => {
-                    this.message = response.data.message;
-                    return UploadService.getFiles();
-                })
-                .then(files => {
-                    this.fileInfos = files.data;
-                })
-                .catch(() => {
-                    this.progress = 0;
-                    this.message = "Could not upload the file!";
-                    this.currentFile = undefined;
-                });
-                this.selectedFile = undefined;
-
                 // Product Object
                 const newProduct = {
-                    id: Date.now(),
+                    // id: Date.now(),
                     name: this.name,
                     category: this.category,
                     price: this.price,
                     weight: this.weight,
                     description: this.description,
-                    fileName: this.fileName,
+                    // fileName: this.fileName,
                 }
+
                 this.$emit('loadProducts', newProduct);
                 this.name = '',
                 this.category = 'none',
@@ -120,11 +92,6 @@ export default {
             console.log(this.fileName);
         },
     },
-    mounted() {
-        UploadService.getFiles().then(response => {
-            this.fileInfos = response.data;
-        });
-    }
 };
 </script>
 
@@ -157,21 +124,15 @@ export default {
     box-shadow: 0 0 30px 1px #7b92af;
     border-radius: 5px;
 }
-.add-product-heading {
-    font-size: 48px;
-    padding-top: 20px;
-    font-style: italic;
-    letter-spacing: 2px;
-}
 .form-group h3 {
     color: #000;
     font-weight: bold;
     padding-top: 25px;
 }
-.add-product {
+.add-product-form {
     width: 100%;
 }
-.add-product label {
+.add-product-form label {
     width: 65%;
     margin-top: 15px;
     margin-bottom: 3px;
@@ -181,10 +142,10 @@ export default {
     font-size: 17px;
     text-align: left;
 }
-.add-product label:nth-child(1) {
+.add-product-form label:nth-child(1) {
     margin-top: 25px;
 }
-.add-product input, .add-product textarea, .add-product select {
+.add-product-form input, .add-product-form textarea, .add-product-form select {
     width: 70%;
     margin: 0 auto;
 }

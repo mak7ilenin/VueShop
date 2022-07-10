@@ -1,13 +1,13 @@
 <template>
     <h2>Product list</h2>
-    <button class="show-products" @click="show =! show">Add product</button>
+    <button class="add-product" @click="show =! show">Add product</button>
     <AddProduct
         v-if="show"
-        @loadProducts="loadProducts"
     />
     <p v-else></p>
     <div class="items__container">
-        <div class="item">
+        <Loader v-if="loading"/>
+        <!-- <div class="item">
             <div class="item__img">
                 <img src="@/assets/products/tomatoes-1296x728-feature.jpg" alt="">
             </div>
@@ -15,7 +15,6 @@
                 <h3>Tomatoes, 1kg</h3>
                 <p class="item__category">Food</p>
                 <p class="item__price">
-                    <!-- <span class="dollars">2</span><sup>64</sup><span class="currency">$</span> -->
                     <span class="dollars">2.64</span><span class="currency">$</span>
                 </p>
                 <p class="item__desc">
@@ -31,27 +30,7 @@
                 <a href="" class="cart-btn">Add to cart</a>
                 <a href="" class="buy-btn">Buy</a>
             </div>
-        </div>
-        <div class="item">
-            <div class="item__img">
-                <img src="@/assets/products/tomatoes-1296x728-feature.jpg" alt="">
-            </div>
-            <div class="item__info">
-                <h3>Tomatoes, 1kg</h3>
-                <p class="item__category">Food</p>
-                <p class="item__price">
-                    <!-- <span class="dollars">2</span><sup>64</sup><span class="currency">$</span> -->
-                    <span class="dollars">2.64</span><span class="currency">$</span>
-                </p>
-                <p class="item__desc">
-                    Lorem ipsum dolor, sit amet consecte
-                </p>
-            </div>
-            <div class="item__btns">
-                <a href="" class="cart-btn">Add to cart</a>
-                <a href="" class="buy-btn">Buy</a>
-            </div>
-        </div>
+        </div> -->
         <ProductList
             v-bind:products="products"
         />
@@ -61,30 +40,55 @@
 <script>
 import ProductList from '@/components/ProductList'
 import AddProduct from '@/components/AddProduct'
+import Loader from '@/components/Loader'
+
+import { db } from '@/firebase/init'
+import { collection, getDocs } from "firebase/firestore"; 
+
 export default {
     data() {
         return {
-            products: [
-                // {name: 'Test', category: 'Food', price: 2, weight: 1, description: 'nothing'},
-            ],
-            show: false
+            products: [],
+            show: false,
+            loading: true
         }
     },
     components: {
         ProductList,
         AddProduct,
+        Loader
     },
     methods: {
-        loadProducts(product) {
-            this.products.push(product);
-            console.log(product);
-        },
+        // loadProducts(product) {
+        //     this.products.push(product);
+        //     console.log(product);
+        // },
+        getProducts: async function() {
+            const querySnapshot = await getDocs(collection(db, "products"));
+            querySnapshot.forEach((doc) => {
+                // console.log(doc.id ," => ", doc.data());
+                const product = {
+                    id: doc.id,
+                    name: doc.data().name,
+                    category: doc.data().category,
+                    price: doc.data().price,
+                    weight: doc.data().weight,
+                    description: doc.data().description,
+                }
+                this.products.push(product)
+                this.loading = false;
+            });
+        }
+    },
+    beforeMount() {
+        this.getProducts()
     }
 }
 </script>
 
 <style>
-.show-products {
+.add-product {
+    width: 300px;
     border: none;
     border-radius: 5px;
     padding: 2px 15px;

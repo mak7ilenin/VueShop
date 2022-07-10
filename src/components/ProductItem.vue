@@ -1,8 +1,8 @@
 <template>
     <div class="item">
         <div class="item__img">
-            <!-- <img src="@/assets/products/tomatoes-1296x728-feature.jpg" alt=""> -->
-            <a :href="file.url">{{ product. }}</a>
+            <img src="@/assets/products/tomatoes-1296x728-feature.jpg" alt="">
+            <!-- <a :href="file.url">{{ product. }}</a> -->
         </div>
         <div class="item__info">
             <h3>{{ product.name }}, {{ product.weight }} kg</h3>

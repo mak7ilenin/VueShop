@@ -7,13 +7,11 @@
 
 <script>
 import Navigation from '@/components/Navigation'
-import Home from '@/views/Home'
 export default {
   name: 'App',
   components: {
-    Navigation,
-    Home,
-  },
+    Navigation
+  }
 }
 </script>
 
