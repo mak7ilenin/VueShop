@@ -38,9 +38,8 @@
 </template>
 
 <script>
-// import { onMounted } from 'vue'
-// import { db } from '@/firebase/init'
-// import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { db } from '@/firebase/init'
+import { addDoc, collection } from "firebase/firestore"; 
 
 export default {
     data() {
@@ -73,8 +72,15 @@ export default {
                     description: this.description,
                     // fileName: this.fileName,
                 }
-
-                this.$emit('loadProducts', newProduct);
+                
+                addDoc(collection(db, 'products'), {
+                    name: this.name,
+                    category: this.category,
+                    price: this.price,
+                    weight: this.weight,
+                    description: this.description,
+                });
+                
                 this.name = '',
                 this.category = 'none',
                 this.price = '',
@@ -89,7 +95,6 @@ export default {
             let fileData = event.target.files[0];
             this.fileName = fileData.name;
             this.selectedFile = fileData;
-            console.log(this.fileName);
         },
     },
 };
