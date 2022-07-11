@@ -43,7 +43,7 @@ import AddProduct from '@/components/AddProduct'
 import Loader from '@/components/Loader'
 
 import { db } from '@/firebase/init'
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, getDocs, onSnapshot } from "firebase/firestore"; 
 
 export default {
     data() {
@@ -59,24 +59,23 @@ export default {
         Loader
     },
     methods: {
-        // loadProducts(product) {
-        //     this.products.push(product);
-        //     console.log(product);
-        // },
         getProducts: async function() {
-            const querySnapshot = await getDocs(collection(db, "products"));
-            querySnapshot.forEach((doc) => {
-                // console.log(doc.id ," => ", doc.data());
-                const product = {
-                    id: doc.id,
-                    name: doc.data().name,
-                    category: doc.data().category,
-                    price: doc.data().price,
-                    weight: doc.data().weight,
-                    description: doc.data().description,
-                }
-                this.products.push(product)
-                this.loading = false;
+
+            const productsCollectionRef = await getDocs(collection(db, "products"));
+
+            onSnapshot(collection(db, 'products'), (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const product = {
+                        id: doc.id,
+                        name: doc.data().name,
+                        category: doc.data().category,
+                        price: doc.data().price,
+                        weight: doc.data().weight,
+                        description: doc.data().description,
+                    }
+                    this.products.push(product)
+                    this.loading = false
+                })
             });
         }
     },

@@ -45,6 +45,7 @@ header {
     background-color: #89e4b9;
     width: 100%;
     height: 100px;
+    z-index: 999;
     display: flex;
     position: fixed;
     top: 0;

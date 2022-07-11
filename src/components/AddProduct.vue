@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { db } from '@/firebase/init'
 import { addDoc, collection } from "firebase/firestore"; 
 
@@ -49,38 +50,31 @@ export default {
             price: '',
             weight: '',
             description: '',
+            
             // File
-            selectedFile: undefined,
-            currentFile: undefined,
-            progress: 0,
-            message: '',
-            fileInfos: [],
+            selectedFile: null,
             fileName: 'Choose file',
         }
     },
     methods: {
         sendProduct() {
-            if(this.name.trim() && this.category.trim() && this.price !== 0 && this.weight !== 0) {
+            if(this.name.trim() 
+                && this.category.trim() 
+                && this.price !== 0 
+                && this.weight !== 0) 
+            {           
+                const addProduct = () => {
+                    addDoc(collection(db, 'products'), {
+                        date: Date.now(),
+                        name: this.name,
+                        category: this.category,
+                        price: this.price,
+                        weight: this.weight,
+                        description: this.description,
 
-                // Product Object
-                const newProduct = {
-                    // id: Date.now(),
-                    name: this.name,
-                    category: this.category,
-                    price: this.price,
-                    weight: this.weight,
-                    description: this.description,
-                    // fileName: this.fileName,
+                    });
                 }
-                
-                addDoc(collection(db, 'products'), {
-                    name: this.name,
-                    category: this.category,
-                    price: this.price,
-                    weight: this.weight,
-                    description: this.description,
-                });
-                
+
                 this.name = '',
                 this.category = 'none',
                 this.price = '',
@@ -88,21 +82,20 @@ export default {
                 this.description = ''
             }
         },
+        selectFile(event) {
+            this.fileName = event.target.files[0].name;
+            this.selectedFile = event.target.files[0];
+        },
         closeForm() {
             $('#productForm').hide();
         },
-        selectFile(event) {
-            let fileData = event.target.files[0];
-            this.fileName = fileData.name;
-            this.selectedFile = fileData;
-        },
-    },
+    }
 };
 </script>
 
 <style>
 #productForm {
-    position: absolute;
+    position: fixed;
     top: 150px;
     left: 50%;
     z-index: 999;
