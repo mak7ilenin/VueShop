@@ -42,7 +42,7 @@ import ProductList from '@/components/ProductList'
 import AddProduct from '@/components/AddProduct'
 import Loader from '@/components/Loader'
 
-import { db } from '@/firebase/init'
+import { storage } from '@/firebase/init'
 import { collection, getDocs, onSnapshot } from "firebase/firestore"; 
 
 export default {
@@ -61,9 +61,9 @@ export default {
     methods: {
         getProducts: async function() {
 
-            const productsCollectionRef = await getDocs(collection(db, "products"));
+            const productsCollectionRef = await getDocs(collection(storage, "products"));
 
-            onSnapshot(collection(db, 'products'), (querySnapshot) => {
+            onSnapshot(collection(storage, 'products'), (querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     const product = {
                         id: doc.id,

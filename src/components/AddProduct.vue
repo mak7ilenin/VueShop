@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { db } from '@/firebase/init'
+import { storage } from '@/firebase/init'
+import { file } from '@babel/types';
 import { addDoc, collection } from "firebase/firestore"; 
 
 export default {
@@ -54,6 +54,7 @@ export default {
             // File
             selectedFile: null,
             fileName: 'Choose file',
+            fileURL: null
         }
     },
     methods: {
@@ -62,19 +63,39 @@ export default {
                 && this.category.trim() 
                 && this.price !== 0 
                 && this.weight !== 0) 
-            {           
-                const addProduct = () => {
-                    addDoc(collection(db, 'products'), {
+            {        
+                
+                const addProduct = (file) => {
+                    addDoc(collection(storage, 'products'), {
                         date: Date.now(),
                         name: this.name,
                         category: this.category,
                         price: this.price,
                         weight: this.weight,
                         description: this.description,
-
                     });
-                }
+                    try {
+                        if (file && file.name) {
 
+                            const fr = new FileReader();
+                            fr.readAsDataURL(file);
+                            fr.addEventListener("load", () => {
+                                this.fileURL = fr.result;
+                            });
+                            const imgData = new FormData();
+                            imgData.append("image", this.selectedFile);
+                            const filePath = `mypath/${Date.now()}-${file.name}`;
+                            const metadata = { contentType: this.selectedFile.type };
+
+                            storage.ref()
+                            .child(filePath)
+                            .put(this.selectedFile, metadata);
+                            console.log("filePath: ", filePath);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
                 this.name = '',
                 this.category = 'none',
                 this.price = '',
