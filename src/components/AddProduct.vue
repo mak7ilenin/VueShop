@@ -45,6 +45,7 @@ import { getStorage, uploadBytesResumable, ref as storageReference } from 'fireb
 export default {
     data() {
         return {
+            // Product info
             name: '',
             category: 'none',
             price: '',
@@ -76,12 +77,12 @@ export default {
                     weight: this.weight,
                     description: this.description,
                 });
-                console.log(currentDateTime);
-                this.name = '',
-                this.category = 'none',
-                this.price = '',
-                this.weight = '',
-                this.description = ''
+                this.name = '';
+                this.category = 'none';
+                this.price = '';
+                this.weight = '';
+                this.description = '';
+                this.fileName = 'Choose file';
             }
         },
         selectFile(event) {
