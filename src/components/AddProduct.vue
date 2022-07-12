@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import { storage } from '@/firebase/init'
-import { file } from '@babel/types';
-import { addDoc, collection } from "firebase/firestore"; 
+import { storage } from '@/firebase/init';
+import { addDoc, collection } from "firebase/firestore";
+import { getStorage, uploadBytesResumable, ref as storageReference } from 'firebase/storage';
 
 export default {
     data() {
@@ -59,43 +59,24 @@ export default {
     },
     methods: {
         sendProduct() {
-            if(this.name.trim() 
-                && this.category.trim() 
-                && this.price !== 0 
-                && this.weight !== 0) 
-            {        
-                
-                const addProduct = (file) => {
-                    addDoc(collection(storage, 'products'), {
-                        date: Date.now(),
-                        name: this.name,
-                        category: this.category,
-                        price: this.price,
-                        weight: this.weight,
-                        description: this.description,
-                    });
-                    try {
-                        if (file && file.name) {
-
-                            const fr = new FileReader();
-                            fr.readAsDataURL(file);
-                            fr.addEventListener("load", () => {
-                                this.fileURL = fr.result;
-                            });
-                            const imgData = new FormData();
-                            imgData.append("image", this.selectedFile);
-                            const filePath = `mypath/${Date.now()}-${file.name}`;
-                            const metadata = { contentType: this.selectedFile.type };
-
-                            storage.ref()
-                            .child(filePath)
-                            .put(this.selectedFile, metadata);
-                            console.log("filePath: ", filePath);
-                        }
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
+            if(this.name.trim() && this.category.trim() && this.price !== 0 && this.weight !== 0) {        
+                const dateString = new Date();
+                const currentDateTime = 
+                    dateString.getFullYear() 
+                    + '/' + ((dateString.getDate()).toString().length === 1 ? + '0' : '') + dateString.getDate()
+                    + '/' + ((dateString.getMonth()).toString().length === 1 ? + '0' : '') + dateString.getMonth()
+                    + ' ' + ((dateString.getHours()).toString().length === 1 ? + '0' : '') + dateString.getHours()
+                    + ':' + ((dateString.getMinutes()).toString().length === 1 ? + '0' : '') + dateString.getMinutes()
+                    + ':' + dateString.getSeconds();
+                addDoc(collection(storage, 'products'), {
+                    date: currentDateTime,
+                    name: this.name,
+                    category: this.category,
+                    price: this.price,
+                    weight: this.weight,
+                    description: this.description,
+                });
+                console.log(currentDateTime);
                 this.name = '',
                 this.category = 'none',
                 this.price = '',
