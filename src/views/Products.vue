@@ -60,6 +60,7 @@ export default {
     },
     beforeMount() {
         this.getProducts()
+        console.log(this.products);
     }
 }
 </script>

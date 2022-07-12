@@ -23,7 +23,7 @@
 
 <script>
 import { storage } from '@/firebase/init'
-import { getDocs, deleteDoc, collection, doc } from 'firebase/firestore'
+import { updateDoc, getDocs, deleteDoc, collection, doc, deleteField } from 'firebase/firestore'
 
 export default {
     props: {
@@ -34,15 +34,31 @@ export default {
     },
     methods: {
         deleteProduct() {
-            const productsCollectionRef = getDocs(collection(storage, 'products'));
+            // Clicked product id
             let id = this.product.id;
-            console.log(id);
-            deleteDoc(productsCollectionRef)
+
+            // Works, but there is another way to do this.
+            const productRef = doc(storage, 'products', id);
+            updateDoc(productRef, {
+                id: deleteField(),
+                date: deleteField(),
+                name: deleteField(),
+                category: deleteField(),
+                price: deleteField(),
+                weight: deleteField(),
+                description: deleteField()
+            })
             .then(function() {
                 console.log('Successful!');
             }).catch(function(e) {
-                console.error('Error: ' + e);
+                console.error('Error: ' + e.message);
             });
+
+            // Check if element is empty
+            ...
+
+            // Second option (delete all products)
+            
         }
     }
 }
