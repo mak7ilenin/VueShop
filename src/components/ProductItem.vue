@@ -49,11 +49,6 @@ export default {
                     price: deleteField(),
                     weight: deleteField(),
                     description: deleteField()
-                })
-                .then(function() {
-                    console.log('Successful!');
-                }).catch(function(e) {
-                    console.error('Error: ' + e.message);
                 });
             }
 

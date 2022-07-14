@@ -10,6 +10,9 @@
         <ProductList
             v-bind:products="products"
         />
+        <div class="products_check" 
+            v-if="!products_check">There are no products available ...
+        </div>
     </div>
 </template>
 
@@ -27,7 +30,8 @@ export default {
         return {
             products: [],
             show: false,
-            loading: true
+            loading: true,
+            products_check: true
         }
     },
     components: {
@@ -38,9 +42,6 @@ export default {
     },
     methods: {
         getProducts: async function() {
-
-            // const productsCollectionRef = await getDocs(collection(storage, 'products'));
-
             onSnapshot(collection(storage, 'products'), (querySnapshot) => {
                 this.products = [];
                 querySnapshot.forEach((doc) => {
@@ -53,13 +54,16 @@ export default {
                         description: doc.data().description
                     }
                     this.products.push(product);
-                    this.loading = false;
                 });
+                this.loading = false;
+                if(this.products.length === 0) {
+                    this.products_check = false;
+                }
             });
         }
     },
     beforeMount() {
-        this.getProducts()
+        this.getProducts();
     }
 }
 </script>
@@ -88,5 +92,25 @@ h2 {
     margin: 50px auto;
     margin-top: 90px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+}
+.products_check {
+    font-size: 36px;
+    color: #fff;
+    animation: pulse 2s infinite;
+    transition: all 1s;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        color: #fff;
+    }
+    70% {
+        transform: scale(1);
+        color: rgb(178, 255, 159);
+    }
+    100% {
+        transform: scale(0.9);
+        color: #fff;
+    }
 }
 </style>
