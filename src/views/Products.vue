@@ -20,7 +20,7 @@ import Loader from '@/components/Loader'
 import ProductItem from '@/components/ProductItem'
 
 import { storage } from '@/firebase/init'
-import { collection, onSnapshot, deleteDoc } from "firebase/firestore"; 
+import { collection, onSnapshot } from "firebase/firestore"; 
 
 export default {
     data() {
@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         getProducts: async function() {
-            
+
             // const productsCollectionRef = await getDocs(collection(storage, 'products'));
 
             onSnapshot(collection(storage, 'products'), (querySnapshot) => {
@@ -60,7 +60,6 @@ export default {
     },
     beforeMount() {
         this.getProducts()
-        console.log(this.products);
     }
 }
 </script>

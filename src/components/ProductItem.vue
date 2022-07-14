@@ -23,7 +23,7 @@
 
 <script>
 import { storage } from '@/firebase/init'
-import { updateDoc, getDocs, deleteDoc, collection, doc, deleteField } from 'firebase/firestore'
+import { updateDoc, deleteDoc, collection, doc, deleteField, onSnapshot } from 'firebase/firestore'
 
 export default {
     props: {
@@ -38,27 +38,42 @@ export default {
             let id = this.product.id;
 
             // Works, but there is another way to do this.
-            const productRef = doc(storage, 'products', id);
-            updateDoc(productRef, {
-                id: deleteField(),
-                date: deleteField(),
-                name: deleteField(),
-                category: deleteField(),
-                price: deleteField(),
-                weight: deleteField(),
-                description: deleteField()
-            })
-            .then(function() {
-                console.log('Successful!');
-            }).catch(function(e) {
-                console.error('Error: ' + e.message);
+
+            function clearAllFields() {
+                const productRef = doc(storage, 'products', id);
+                updateDoc(productRef, {
+                    id: deleteField(),
+                    date: deleteField(),
+                    name: deleteField(),
+                    category: deleteField(),
+                    price: deleteField(),
+                    weight: deleteField(),
+                    description: deleteField()
+                })
+                .then(function() {
+                    console.log('Successful!');
+                }).catch(function(e) {
+                    console.error('Error: ' + e.message);
+                });
+            }
+
+
+            // Second option => delete all products
+
+            function deleteAllProducts() {
+                onSnapshot(collection(storage, 'products'), (querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        deleteDoc(doc.ref)
+                    });
+                });
+            }
+
+
+            // Delete particular product
+
+            onSnapshot(doc(storage, "products", id), (doc) => {
+                deleteDoc(doc.ref);
             });
-
-            // Check if element is empty
-            ...
-
-            // Second option (delete all products)
-            
         }
     }
 }
