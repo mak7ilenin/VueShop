@@ -22,17 +22,28 @@
             <ul>
                 <li>My profile</li>
                 <router-link to="/log-in"><li>Log in</li></router-link>
-                <li class="sign-out">Sign out</li>
+                <li class="sign-out" @click="signOut">Sign out</li>
             </ul>
         </div>
     </header>
 </template>
 
 <script>
+import router from '@/router';
+import { auth } from '@/firebase/init';
+import { signOut } from 'firebase/auth';
 export default {
     methods: {
         openProfileDropdown() {
             $('.profile__dropdown').toggle('active');
+        },
+        signOut() {
+            signOut(auth).then(() => {
+                router.replace('/log-in');
+            })
+            .catch((e) => {
+                alert(e.message);
+            });
         }
     }
 }
