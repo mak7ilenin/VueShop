@@ -58,6 +58,8 @@ export default {
                 this.loading = false;
                 if(this.products.length === 0) {
                     this.products_check = false;
+                }else {
+                    this.products_check = true;
                 }
             });
         }
