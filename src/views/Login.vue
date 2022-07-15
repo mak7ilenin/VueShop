@@ -1,12 +1,13 @@
 <template>
     <form class="registration__form" @submit.prevent="onLogin">
         <h2>Sign in</h2>
-        <p class="empty-inputs"></p>
+        <p class="empty-inputs" v-if="empty">Please fill in the all fields!</p>
 
         <input type="text" placeholder="Email" v-model="email">
         <input type="password" placeholder="Password" v-model="password">
 
         <button type="submit">Submit</button>
+        <button class="google__auth">Sign in with Google</button>
     </form>
 </template>
 
@@ -17,20 +18,29 @@ export default {
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            empty: false
         }
     },
     methods: {
         onLogin() {
-            createUserWithEmailAndPassword(auth, this.email, this.password)
-                .then((data) => {
-                    // Signed in
-                    alert('Successfully registered!');
-                })
-                .catch((e) => {
-                    alert(e.code);
-                    alert(e.message);
-                })
+            if(this.email.trim() === '' && this.password.trim() === '') {
+                this.empty = true;
+                return;
+            }else {
+                this.empty = false;
+                createUserWithEmailAndPassword(auth, this.email, this.password)
+                    .then((data) => {
+                        // Signed in
+                        alert('Successfully registered!');
+                        this.email = '';
+                        this.password = '';
+                    })
+                    .catch((e) => {
+                        console.log(e.code);
+                        alert(e.message);
+                    });
+            }
         }
     }
 }
@@ -54,6 +64,7 @@ export default {
     width: 450px;
     height: 60px;
     font-size: 18px;
+    position: relative;
     border-radius: 5px;
     padding-left: 30px;
     margin: 20px;
@@ -72,5 +83,24 @@ export default {
 .registration__form button:hover {
     transform: scale(1.02);
     letter-spacing: 2px
+}
+.google__auth {
+    margin-top: 10px !important;
+    background-color: #e4c75cd3 !important;
+}
+.google__auth:after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+    right: -100px;
+    top: 4px;
+    background-image: url('../assets/Google__G__Logo.svg');
+}
+.google__auth:hover {
+    letter-spacing: 0 !important;
+    transform: scale(1) !important;
+    background-color: #edca4ed4 !important;
 }
 </style>
