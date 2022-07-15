@@ -21,8 +21,7 @@
         <div class="profile__dropdown">
             <ul>
                 <li>My profile</li>
-                <router-link to="/registration"><li>Sign up</li></router-link>
-                <li>Log in</li>
+                <router-link to="/log-in"><li>Log in</li></router-link>
                 <li class="sign-out">Sign out</li>
             </ul>
         </div>
