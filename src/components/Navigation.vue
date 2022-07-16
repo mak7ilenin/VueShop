@@ -1,15 +1,15 @@
 <template>
     <header>
         <div class="header__logo">
-            <router-link to="/">
+            <router-link to='/'>
                 <img src="../assets/logo.png" alt="logo">
             </router-link>
         </div>
         <div class="header__list">
             <ul>
-                <li><router-link to="/products">Products</router-link></li>
+                <li v-if="authed"><router-link to="/products">Products</router-link></li>
                 <!-- <li><router-link to="/addProduct">Add product</router-link></li> -->
-                <li><router-link to="/editProduct">Edit product</router-link></li>
+                <li v-if="authed"><router-link to="/editProduct">Edit product</router-link></li>
             </ul>
         </div>
         <div class="header__profile">
@@ -36,7 +36,9 @@ export default {
     data() {
         return {
             user_name: '',
-            user_status: false
+            user_status: false,
+            authed: false,
+            logo_path: '',
         }
     },
     methods: {
@@ -54,6 +56,8 @@ export default {
         isSignedIn: async function() {
             onAuthStateChanged(auth, (user) => {
                 if(user) {
+                    this.authed = true;
+                    this.logo_path = '/';
                     const userEmail = user.email;
                     this.user_name = userEmail;
                     this.user_status = true;
@@ -61,6 +65,8 @@ export default {
                     $('.user_email').removeClass('unknown');
                     $('.my-profile').removeClass('unlogged-1');
                 }else {
+                    this.authed = false;
+                    this.logo_path = '';
                     this.user_name = '';
                     this.user_status = false;
                     $('.log-in').addClass('unlogged');
