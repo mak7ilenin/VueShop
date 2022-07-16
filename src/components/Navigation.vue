@@ -143,6 +143,7 @@ header {
     width: 250px;
     display: none;
     background-color: #4b6e91;
+    overflow: hidden;
     position: absolute;
     right: 70px;
     top: 100px;
@@ -175,7 +176,7 @@ header {
 .unlogged-1 {
     margin-top: 0 !important;
 }
-.profile__dropdown ul li:hover {
+.profile__dropdown ul li:not(.user_email):hover {
     transform: scale(1.05);
     cursor: pointer;
 }

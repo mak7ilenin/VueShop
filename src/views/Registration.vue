@@ -1,5 +1,5 @@
 <template>
-    <form class="registration__form">
+    <form class="registration__form" @submit.prevent="onRegister">
         <h2>Registration</h2>
         <p class="empty-inputs" v-if="empty">Please fill in the all fields!</p>
 
@@ -23,7 +23,7 @@ export default {
         }
     },
     methods: {
-        onLogin() {
+        onRegister() {
             if(this.email.trim() === '' && this.password.trim() === '') {
                 this.empty = true;
                 return;
