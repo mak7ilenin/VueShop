@@ -20,9 +20,10 @@
         </div>
         <div class="profile__dropdown">
             <ul>
-                <li>My profile</li>
-                <router-link to="/log-in"><li>Log in</li></router-link>
-                <li class="sign-out" @click="signOut">Sign out</li>
+                <li class="user_email">{{ user_name }}</li>
+                <li class="my-profile">My profile</li>
+                <router-link to="/log-in"><li class="log-in">Log in</li></router-link>
+                <li class="sign-out" @click="signOut" v-if="user_status">Sign out</li>
             </ul>
         </div>
     </header>
@@ -31,8 +32,14 @@
 <script>
 import router from '@/router';
 import { auth } from '@/firebase/init';
-import { signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 export default {
+    data() {
+        return {
+            user_name: '',
+            user_status: false
+        }
+    },
     methods: {
         openProfileDropdown() {
             $('.profile__dropdown').toggle('active');
@@ -44,7 +51,28 @@ export default {
             .catch((e) => {
                 alert(e.message);
             });
+        },
+        isSignedIn: async function() {
+            onAuthStateChanged(auth, (user) => {
+                if(user) {
+                    const userEmail = user.email;
+                    this.user_name = userEmail;
+                    this.user_status = true;
+                    $('.log-in').removeClass('unlogged');
+                    $('.user_email').removeClass('unknown');
+                    $('.my-profile').removeClass('unlogged-1');
+                }else {
+                    this.user_name = '';
+                    this.user_status = false;
+                    $('.log-in').addClass('unlogged');
+                    $('.user_email').addClass('unknown');
+                    $('.my-profile').addClass('unlogged-1');
+                }
+            });
         }
+    },
+    beforeMount() {
+        this.isSignedIn();
     }
 }
 </script>
@@ -122,6 +150,11 @@ header {
 .active {
     display: unset;
 }
+.unknown {
+    height: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+}
 .profile__dropdown ul {
     margin: 0;
 }
@@ -132,6 +165,15 @@ header {
     background-color: #1b2d41;
     padding: 10px;
     transition: all .05s;
+}
+.log-in {
+    margin-bottom: 0 !important;
+}
+.unlogged {
+    margin-bottom: 5px;
+}
+.unlogged-1 {
+    margin-top: 0 !important;
 }
 .profile__dropdown ul li:hover {
     transform: scale(1.05);
