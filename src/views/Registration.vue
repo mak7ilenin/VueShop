@@ -3,41 +3,55 @@
         <h2>Registration</h2>
         <p class="empty-inputs" v-if="empty">Please fill in the all fields!</p>
 
-        <input type="text" placeholder="Email" v-model="email">
-        <input type="password" placeholder="Password" v-model="password">
+        <input type="text" placeholder="Email" v-model="email" class="form-control">
+        <input type="password" placeholder="Password" v-model="password" class="form-control">
+
+        <input type="text" placeholder="Username" v-model="username" class="form-control">
+        <input type="number" placeholder="Money" min="0.01" step=".01" v-model="money" class="form-control">
 
         <button type="submit">Submit</button>
     </form>
 </template>
 
 <script>
-import { auth } from '@/firebase/init';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection } from 'firebase/firestore';
+import { storage, auth } from '@/firebase/init';
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import router from '@/router';
 export default {
     data() {
         return {
             email: '',
             password: '',
+            username: '',
+            money: null,
             empty: false
         }
     },
     methods: {
         onRegister() {
-            if(this.email.trim() === '' && this.password.trim() === '') {
+            if(this.email.trim() === '' 
+                || this.password.trim() === ''
+                || this.username.trim() === ''
+                || this.money.trim() === '') 
+            {
                 this.empty = true;
                 return;
             }else {
                 this.empty = false;
                 createUserWithEmailAndPassword(auth, this.email, this.password)
                     .then(() => {
-                        alert('Successfully registered!');
-                        this.email = '';
-                        this.password = '';
+                        const user = auth.currentUser;
+                        const userId = user.uid;
+                        addDoc(collection(storage, 'users'), {
+                            userId: userId,
+                            username: this.username,
+                            money: this.money
+                        });
                         router.replace('/log-in');
+                        // alert('Successfully registered!');
                     })
                     .catch((e) => {
-                        console.log(e.code);
                         alert(e.message);
                     });
             }
@@ -67,7 +81,7 @@ export default {
     position: relative;
     border-radius: 5px;
     padding-left: 30px;
-    margin: 20px;
+    margin: 25px auto;
     margin-bottom: 10px;
 }
 .registration__form button {

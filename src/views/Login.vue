@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         onLogin() {
-            if(this.email.trim() === '' && this.password.trim() === '') {
+            if(this.email.trim() === '' || this.password.trim() === '') {
                 this.empty = true;
                 return;
             }else {

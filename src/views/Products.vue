@@ -78,7 +78,7 @@ export default {
     font-weight: bold;
     cursor: pointer;
 
-    background-image: linear-gradient(to right, #1D976C 0%, #69b685  51%, #1D976C  100%);
+    background-image: linear-gradient(to right, #1D976C 0%, #1f5734  51%, #1D976C  100%);
     margin: 30px auto;
     margin-bottom: 0;
     padding: 15px 45px;

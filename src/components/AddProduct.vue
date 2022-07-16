@@ -40,7 +40,6 @@
 <script>
 import { storage } from '@/firebase/init';
 import { addDoc, collection } from "firebase/firestore";
-import { getStorage, uploadBytesResumable, ref as storageReference } from 'firebase/storage';
 
 export default {
     data() {
@@ -60,7 +59,7 @@ export default {
     },
     methods: {
         sendProduct() {
-            if(this.name.trim() && this.category.trim() && this.price !== 0 && this.weight !== 0) {        
+            if(this.name.trim() || this.category.trim() || this.price !== 0 || this.weight !== 0) {        
                 const dateString = new Date();
                 const currentDateTime = 
                     dateString.getFullYear() 
