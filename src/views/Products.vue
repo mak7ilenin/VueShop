@@ -74,11 +74,26 @@ export default {
 .add-product {
     width: 300px;
     border: none;
-    border-radius: 5px;
-    padding: 2px 15px;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
+
+    background-image: linear-gradient(to right, #1D976C 0%, #69b685  51%, #1D976C  100%);
+    margin: 30px auto;
+    margin-bottom: 0;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 5px rgb(31, 255, 113);
+    border-radius: 10px;
+    display: block;    
+}
+.add-product:hover {
+    background-position: right center; /* change the direction of the change here */
+    text-decoration: none;
 }
 h2 {
     font-size: 48px;

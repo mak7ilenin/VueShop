@@ -183,16 +183,21 @@ export default {
     font-size: 18px;
     padding: 7px;
     border-radius: 5px;
-    opacity: 0.8;
 }
 .item__btns .cart-btn {
-    background-color: #1cb5e4;
+    background-color: hsla(194, 79%, 50%, 0.655);
 }
 .item__btns .buy-btn {
-    background-color: #1ce480;
+    background-color: hsla(150, 79%, 50%, 0.655);
 }
 .item__btns a:hover {
     transform: scale(1.02);
-    opacity: 1;
+    color: #fff !important;
+}
+.item__btns .cart-btn:hover {
+    background-color: hsl(194, 79%, 50%);
+}
+.item__btns .buy-btn:hover {
+    background-color: hsl(150, 79%, 50%);
 }
 </style>
