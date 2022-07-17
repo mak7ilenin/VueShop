@@ -15,17 +15,22 @@
             <p class="item__desc">{{ product.description }}</p>
         </div>
         <div class="item__btns">
-            <a href="" class="cart-btn">Add to cart</a>
-            <a href="" class="buy-btn">Buy</a>
+            <a class="cart-btn">Add to cart</a>
+            <a class="buy-btn" @click="buyProduct()">Buy</a>
         </div>
     </div>
 </template>
 
 <script>
-import { storage } from '@/firebase/init'
+import { storage, auth } from '@/firebase/init'
 import { updateDoc, deleteDoc, collection, doc, deleteField, onSnapshot } from 'firebase/firestore'
 
 export default {
+    data() {
+        return {
+            users: []
+        }
+    },
     props: {
         product: {
             type: Object,
@@ -68,6 +73,24 @@ export default {
 
             onSnapshot(doc(storage, "products", id), (doc) => {
                 deleteDoc(doc.ref);
+            });
+        },
+        buyProduct() {
+            const currentUser = auth.currentUser;
+            onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    this.users = [];
+                    const user = {
+                        id: doc.id,
+                        userId: doc.data().userId,
+                        money: doc.data().money
+                    }
+                    this.users.push(user);
+                });
+                console.log(this.users.target.userId);
+                if(this.users.id === currentUser.uid) {
+                    console.log('fsd');
+                }
             });
         }
     }
@@ -183,6 +206,7 @@ export default {
     font-size: 18px;
     padding: 7px;
     border-radius: 5px;
+    cursor: pointer;
 }
 .item__btns .cart-btn {
     background-color: hsla(194, 79%, 50%, 0.655);

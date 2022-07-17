@@ -90,6 +90,7 @@ export default {
         },
         closeForm() {
             $('#productForm').hide();
+            this.show = false;
         },
     }
 };

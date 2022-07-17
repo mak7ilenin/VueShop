@@ -1,6 +1,6 @@
 <template>
     <h2>Product list</h2>
-    <button class="add-product" @click="show =! show">Add product</button>
+    <button class="add-product" @click="show = !show">Add product</button>
     <AddProduct
         v-if="show"
     />
@@ -76,20 +76,20 @@ export default {
     border: none;
     font-size: 20px;
     font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
     cursor: pointer;
+    color: white;            
 
-    background-image: linear-gradient(to right, #1D976C 0%, #1f5734  51%, #1D976C  100%);
     margin: 30px auto;
     margin-bottom: 0;
     padding: 15px 45px;
-    text-align: center;
-    text-transform: uppercase;
-    transition: 0.5s;
+
+    background-image: linear-gradient(to right, #1D976C 0%, #1f5734  51%, #1D976C  100%);
     background-size: 200% auto;
-    color: white;            
     box-shadow: 0 0 5px rgb(31, 255, 113);
-    border-radius: 10px;
-    display: block;    
+    border-radius: 10px; 
+    transition: ease all 0.4s;
 }
 .add-product:hover {
     background-position: right center; /* change the direction of the change here */
