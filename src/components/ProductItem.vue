@@ -87,7 +87,8 @@ export default {
                     }
                     this.users.push(user);
                 });
-                console.log(this.users.target.userId);
+                let usersId = this.users.map(({userId}) => userId)
+                console.log(result);
                 if(this.users.id === currentUser.uid) {
                     console.log('fsd');
                 }
