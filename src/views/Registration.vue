@@ -33,7 +33,7 @@ export default {
             if(this.email.trim() === '' 
                 || this.password.trim() === ''
                 || this.username.trim() === ''
-                || this.money.trim() === '') 
+                || this.money === 0) 
             {
                 this.empty = true;
                 return;

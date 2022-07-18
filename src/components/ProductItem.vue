@@ -78,19 +78,25 @@ export default {
         buyProduct() {
             const currentUser = auth.currentUser;
             onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+                this.users = [];
                 querySnapshot.forEach((doc) => {
-                    this.users = [];
                     const user = {
                         id: doc.id,
                         userId: doc.data().userId,
+                        username: doc.data().username,
                         money: doc.data().money
                     }
                     this.users.push(user);
                 });
-                let usersId = this.users.map(({userId}) => userId)
-                console.log(result);
-                if(this.users.id === currentUser.uid) {
-                    console.log('fsd');
+                function getUser(user) {
+                    return user.userId === currentUser.uid;
+                }
+                // console.log(this.users.find(getUser));
+                const currentArrayUser = this.users.find(getUser);
+
+                if(currentArrayUser.userId === currentUser.uid) {
+                    const finalMoney = currentArrayUser.money - this.product.price;
+                    console.log(finalMoney);
                 }
             });
         }
