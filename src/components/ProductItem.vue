@@ -80,7 +80,7 @@ export default {
             onSnapshot(collection(storage, 'users'), (querySnapshot) => {
                 this.users = [];
                 querySnapshot.forEach((doc) => {
-                    const user = {
+                    var user = {
                         id: doc.id,
                         userId: doc.data().userId,
                         username: doc.data().username,
@@ -88,17 +88,51 @@ export default {
                     }
                     this.users.push(user);
                 });
+                // function getUser(user) {
+                //     return user.userId === currentUser.uid;
+                // }
+
+                // const currentArrayUser = this.users.find(getUser);
+
+                // if(currentArrayUser.userId === currentUser.uid) {
+                //     console.log(currentArrayUser.money);
+                //     console.log(this.product.price);
+                //     if(currentArrayUser.money >= this.product.price) {
+                //         var userMoney = currentArrayUser.money - this.product.price;
+                //         updateDoc(doc(storage, 'users', currentArrayUser.id), {
+                //             money: userMoney
+                //         });
+                //     }else {
+                //         alert('Not enough money!');
+                //     }
+                // }else {
+                //     alert('Something went wrong!');
+                // }
+            })
+            try {
                 function getUser(user) {
                     return user.userId === currentUser.uid;
                 }
-                // console.log(this.users.find(getUser));
+    
                 const currentArrayUser = this.users.find(getUser);
-
+    
                 if(currentArrayUser.userId === currentUser.uid) {
-                    const finalMoney = currentArrayUser.money - this.product.price;
-                    console.log(finalMoney);
+                    console.log(currentArrayUser.money);
+                    console.log(this.product.price);
+                    if(currentArrayUser.money >= this.product.price) {
+                        var userMoney = currentArrayUser.money - this.product.price;
+                        updateDoc(doc(storage, 'users', currentArrayUser.id), {
+                            money: userMoney
+                        });
+                    } else {
+                        alert('Not enough money!');
+                    }
+                } else {
+                    alert('Something went wrong!');
                 }
-            });
+            } catch(e) {
+                alert(e.message);
+            }
         }
     }
 }
