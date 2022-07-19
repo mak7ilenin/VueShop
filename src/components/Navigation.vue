@@ -8,7 +8,6 @@
         <div class="header__list">
             <ul>
                 <li v-if="authed"><router-link to="/products">Products</router-link></li>
-                <!-- <li><router-link to="/addProduct">Add product</router-link></li> -->
                 <li v-if="authed"><router-link to="/editProduct">Edit product</router-link></li>
             </ul>
         </div>
@@ -20,10 +19,9 @@
         </div>
         <div class="profile__dropdown">
             <ul>
-                <li class="user_email">{{ user_name }}</li>
-                <li class="my-profile">My profile</li>
-                <router-link to="/log-in"><li class="log-in">Log in</li></router-link>
-                <li class="sign-out" @click="signOut" v-if="authed">Sign out</li>
+                <li class="username profile__dropdown__btn">{{ user_name }}</li>
+                <router-link to="/log-in"><li class="log-in profile__dropdown__btn">Log in</li></router-link>
+                <li class="sign-out profile__dropdown__btn" @click="signOut" v-if="authed">Sign out</li>
             </ul>
         </div>
     </header>
@@ -37,15 +35,20 @@ import { onSnapshot, collection } from 'firebase/firestore';
 export default {
     data() {
         return {
-            user_name: '',
+            user_name: undefined,
             user_money: 0,
-            user_status: false,
             authed: false,
         }
     },
     methods: {
         openProfileDropdown() {
-            $('.profile__dropdown').toggle('active');
+            $(".profile__dropdown").slideToggle(250, 'swing');
+            $(document).on("click", function(event){
+                var $trigger = $(".profile__img");
+                if($trigger !== event.target && !$trigger.has(event.target).length){
+                    $(".profile__dropdown").slideUp(400, 'swing');
+                }            
+            });
         },
         signOut() {
             signOut(auth).then(() => {
@@ -61,34 +64,35 @@ export default {
                     this.authed = true;
 
                     $('.log-in').removeClass('unlogged');
-                    $('.user_email').removeClass('unknown');
-                    $('.my-profile').removeClass('unlogged-1');
+                    $('.log-in').removeClass('unlogged, unlogged-1');
+                    $('.username').removeClass('unknown');
+
+                    onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+                        const usersList = [];
+                        querySnapshot.forEach((doc) => {
+                            const user = {
+                                userId: doc.data().userId,
+                                username: doc.data().username,
+                                money: doc.data().money
+                            }
+                            usersList.push(user);
+                        });
+                        const thisUser = usersList.find(user => user.userId === (auth.currentUser).uid);
+                        this.user_money = thisUser.money;
+                        this.user_name = thisUser.username;
+                    });
                 }else {
                     this.authed = false;
 
                     $('.log-in').addClass('unlogged');
-                    $('.user_email').addClass('unknown');
-                    $('.my-profile').addClass('unlogged-1');
+                    $('.log-in').addClass('unlogged-1');
+                    $('.username').addClass('unknown');
                 }
             });
         }
     },
     beforeMount() {
         this.isSignedIn();
-
-        onSnapshot(collection(storage, 'users'), (querySnapshot) => {
-            const usersList = [];
-            querySnapshot.forEach((doc) => {
-                const user = {
-                    userId: doc.data().userId,
-                    username: doc.data().username,
-                    money: doc.data().money
-                }
-                usersList.push(user);
-            });
-            const thisUser = usersList.find(user => user.userId === (auth.currentUser).uid);
-            this.user_money = thisUser.money;
-        });
     }
 }
 </script>
@@ -142,6 +146,7 @@ header {
 .header__profile p {
     color: #000;
     font-weight: bold;
+    font-size: 20px;
 }
 .profile__img {
     width: 100%;
@@ -175,6 +180,7 @@ header {
 }
 .unknown {
     height: 0;
+    display: none;
     margin: 0 !important;
     padding: 0 !important;
 }
