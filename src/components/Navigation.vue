@@ -13,7 +13,7 @@
             </ul>
         </div>
         <div class="header__profile">
-            <p>{{ user_money }}</p>
+            <p v-if="authed">{{ user_money }}$</p>
             <div class="profile__img">
                 <img src="../assets/profile.png" alt="profile" @click="openProfileDropdown">
             </div>
@@ -23,7 +23,7 @@
                 <li class="user_email">{{ user_name }}</li>
                 <li class="my-profile">My profile</li>
                 <router-link to="/log-in"><li class="log-in">Log in</li></router-link>
-                <li class="sign-out" @click="signOut" v-if="user_status">Sign out</li>
+                <li class="sign-out" @click="signOut" v-if="authed">Sign out</li>
             </ul>
         </div>
     </header>
@@ -38,7 +38,7 @@ export default {
     data() {
         return {
             user_name: '',
-            user_money: null,
+            user_money: 0,
             user_status: false,
             authed: false,
         }
@@ -59,17 +59,12 @@ export default {
             onAuthStateChanged(auth, (user) => {
                 if(user) {
                     this.authed = true;
-                    const userEmail = user.email;
-                    this.user_name = userEmail;
-                    this.user_status = true;
 
                     $('.log-in').removeClass('unlogged');
                     $('.user_email').removeClass('unknown');
                     $('.my-profile').removeClass('unlogged-1');
                 }else {
                     this.authed = false;
-                    this.user_name = '';
-                    this.user_status = false;
 
                     $('.log-in').addClass('unlogged');
                     $('.user_email').addClass('unknown');
@@ -91,8 +86,7 @@ export default {
                 }
                 usersList.push(user);
             });
-            const currentUser = auth.currentUser;
-            const thisUser = usersList.find(user => user.userId === currentUser.uid);
+            const thisUser = usersList.find(user => user.userId === (auth.currentUser).uid);
             this.user_money = thisUser.money;
         });
     }
@@ -113,7 +107,7 @@ header {
     right: 0;
 }
 .header__logo {
-    width: 10%;
+    width: 11%;
     height: 100%;
 }
 .header__logo img {
@@ -122,7 +116,7 @@ header {
     cursor: pointer;
 }
 .header__list {
-    width: 80%;
+    width: 78%;
     display: flex;
     justify-content: center;
 }
@@ -140,7 +134,7 @@ header {
     font-weight: 600;
 }
 .header__profile {
-    width: 10%;
+    width: 11%;
     height: 100%;
     display: flex;
     align-items: center;
