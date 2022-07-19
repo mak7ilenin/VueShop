@@ -58,6 +58,7 @@ export default {
                     this.products.push(product);
                 });
                 this.loading = false;
+                $('.loader__container').hide();
                 if(this.products.length === 0) {
                     this.products_check = false;
                 }else {
@@ -106,10 +107,11 @@ h2 {
 }
 .loader__container {
     width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 100px;
 }
 .items__container {
     width: 85%;

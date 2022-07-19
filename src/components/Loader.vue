@@ -1,67 +1,37 @@
 <template>
-    <span class="loader"></span>
+  <span class="loader"></span>
 </template>
 
 <style>
 /* Loading icon */
 .loader {
-  animation: rotate 1s infinite;
-  height: 50px;
-  width: 50px;
-}
-.loader:before,
-.loader:after {
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  content: "";
-  display: block;
-  height: 20px;
-  width: 20px;
+  display: inline-block;
+  border-top: 4px solid #FFF;
+  border-right: 4px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
-.loader:before {
-  animation: ball1 2s infinite;
-  background-color: #fff;
-  box-shadow: 30px 0 0 #008cff;
-  margin-bottom: 10px;
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border-bottom: 4px solid #33ff00;
+  border-left: 4px solid transparent;
 }
-.loader:after {
-  animation: ball2 2s infinite;
-  background-color: #008cff;
-  box-shadow: 30px 0 0 #fff;
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg) scale(0.8) }
-  50% { transform: rotate(360deg) scale(1.2) }
-  100% { transform: rotate(720deg) scale(0.8) }
-}
-
-@keyframes ball1 {
-0% {
-    box-shadow: 30px 0 0 #008cff;
-}
-50% {
-    box-shadow: 0 0 0 #008cff;
-    margin-bottom: 0;
-    transform: translate(15px, 15px);
-}
-100% {
-    box-shadow: 30px 0 0 #008cff;
-    margin-bottom: 10px;
-}
-}
-
-@keyframes ball2 {
-0% {
-    box-shadow: 30px 0 0 #fff;
-}
-50% {
-    box-shadow: 0 0 0 #fff;
-    margin-top: -20px;
-    transform: translate(15px, 15px);
-}
-100% {
-    box-shadow: 30px 0 0 #fff;
-    margin-top: 0;
-}
-}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
 </style>    

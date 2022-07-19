@@ -43,7 +43,6 @@ export default {
             let id = this.product.id;
 
             // Works, but there is another way to do this.
-
             function clearAllFields() {
                 const productRef = doc(storage, 'products', id);
                 updateDoc(productRef, {
@@ -57,9 +56,7 @@ export default {
                 });
             }
 
-
             // Second option => delete all products
-
             function deleteAllProducts() {
                 onSnapshot(collection(storage, 'products'), (querySnapshot) => {
                     querySnapshot.forEach((doc) => {
@@ -68,9 +65,7 @@ export default {
                 });
             }
 
-
             // Delete particular product
-
             onSnapshot(doc(storage, "products", id), (doc) => {
                 deleteDoc(doc.ref);
             });
@@ -89,22 +84,27 @@ export default {
                     this.users.push(user);
                 });
             });
-            const currentArrayUser = this.users.find(Object => Object.userId === currentUser.uid)
+            const currentArrayUser = this.users.find(user => user.userId === currentUser.uid)
             console.log(currentArrayUser);
                 if(currentArrayUser.money >= this.product.price) {
-                    try {
-                        // Function to convert the number
-                        function truncate(number, index = 2) {
-                            return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+                    let confirmPurchase = 'Are you sure you want to buy this product?';
+                    if(confirm(confirmPurchase)) {
+                        try {
+                            // Function to convert the number
+                            function truncate(number, index = 2) {
+                                return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+                            }
+                            const userMoney = truncate((currentArrayUser.money - this.product.price), 2);
+                            
+                            updateDoc(doc(storage, 'users', currentArrayUser.id), {
+                                money: userMoney
+                            });
+                            console.log(userMoney);
+                        } catch(e) {
+                            alert('Something went wrong ...');
                         }
-                        const userMoney = truncate((currentArrayUser.money - this.product.price), 2);
-                        
-                        updateDoc(doc(storage, 'users', currentArrayUser.id), {
-                            money: userMoney
-                        });
-                        console.log(userMoney);
-                    } catch(e) {
-                        alert('Something went wrong ...');
+                    } else {
+                        return;
                     }
                 } else {
                     alert('Not enough money!');
@@ -234,6 +234,9 @@ export default {
 .item__btns a {
     transition: all .4s;
     width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 18px;
     padding: 7px;
     border-radius: 5px;
