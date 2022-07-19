@@ -5,13 +5,15 @@
         v-if="show"
     />
     <p v-else></p>
-    <div class="items__container">
+    <div class="loader__container">
         <Loader v-if="loading"/>
+    </div>
+    <div class="items__container">
         <ProductList
             v-bind:products="products"
         />
-        <div class="products_check" 
-            v-if="!products_check">There are no products available ...
+        <div class="products_check" v-if="!products_check">
+            There are no products available ...
         </div>
     </div>
 </template>
@@ -60,6 +62,7 @@ export default {
                     this.products_check = false;
                 }else {
                     this.products_check = true;
+                    $('.items__container').addClass('animateItem')
                 }
             });
         }
@@ -101,14 +104,30 @@ h2 {
     font-style: italic;
     padding-top: 35px;
 }
+.loader__container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
 .items__container {
     width: 85%;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
     margin: 50px auto;
-    margin-top: 90px;
+    margin-top: 20px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+    transition: ease all 1s;
+
+    position: relative;
+    opacity: 0;
+    top: 50px;
+}
+.animateItem {
+    top: 0px !important;
+    opacity: 1 !important;
 }
 .products_check {
     font-size: 36px;

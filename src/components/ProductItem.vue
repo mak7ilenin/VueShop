@@ -80,7 +80,7 @@ export default {
             onSnapshot(collection(storage, 'users'), (querySnapshot) => {
                 this.users = [];
                 querySnapshot.forEach((doc) => {
-                    var user = {
+                    const user = {
                         id: doc.id,
                         userId: doc.data().userId,
                         username: doc.data().username,
@@ -88,52 +88,37 @@ export default {
                     }
                     this.users.push(user);
                 });
-                // function getUser(user) {
-                //     return user.userId === currentUser.uid;
-                // }
-
-                // const currentArrayUser = this.users.find(getUser);
-
-                // if(currentArrayUser.userId === currentUser.uid) {
-                //     console.log(currentArrayUser.money);
-                //     console.log(this.product.price);
-                //     if(currentArrayUser.money >= this.product.price) {
-                //         var userMoney = currentArrayUser.money - this.product.price;
-                //         updateDoc(doc(storage, 'users', currentArrayUser.id), {
-                //             money: userMoney
-                //         });
-                //     }else {
-                //         alert('Not enough money!');
-                //     }
-                // }else {
-                //     alert('Something went wrong!');
-                // }
-            })
-            try {
-                function getUser(user) {
-                    return user.userId === currentUser.uid;
-                }
-    
-                const currentArrayUser = this.users.find(getUser);
-    
-                if(currentArrayUser.userId === currentUser.uid) {
-                    console.log(currentArrayUser.money);
-                    console.log(this.product.price);
-                    if(currentArrayUser.money >= this.product.price) {
+            });
+            const currentArrayUser = this.users.find(Object => Object.userId === currentUser.uid)
+            console.log(currentArrayUser);
+                if(currentArrayUser.money >= this.product.price) {
+                    try {
                         var userMoney = currentArrayUser.money - this.product.price;
                         updateDoc(doc(storage, 'users', currentArrayUser.id), {
                             money: userMoney
                         });
-                    } else {
-                        alert('Not enough money!');
+                        console.log(userMoney);
+                    } catch(e) {
+                        alert(e.message);
                     }
                 } else {
-                    alert('Something went wrong!');
+                    alert('Not enough money!');
                 }
-            } catch(e) {
-                alert(e.message);
-            }
         }
+    },
+    beforeMount() {
+        onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+            this.users = [];
+            querySnapshot.forEach((doc) => {
+                const user = {
+                    id: doc.id,
+                    userId: doc.data().userId,
+                    username: doc.data().username,
+                    money: doc.data().money
+                }
+                this.users.push(user);
+            });
+        });
     }
 }
 </script>
