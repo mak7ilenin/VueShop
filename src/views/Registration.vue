@@ -15,7 +15,7 @@
 
 <script>
 import { addDoc, collection } from 'firebase/firestore';
-import { storage, auth } from '@/firebase/init';
+import { db, auth } from '@/firebase/init';
 import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import router from '@/router';
 export default {
@@ -43,7 +43,7 @@ export default {
                     .then(() => {
                         const user = auth.currentUser;
                         const userId = user.uid;
-                        addDoc(collection(storage, 'users'), {
+                        addDoc(collection(db, 'users'), {
                             userId: userId,
                             username: this.username,
                             money: this.money

@@ -2,7 +2,7 @@
     <div class="item" :id="product.id">
         <div class="item__close-btn" @click="deleteProduct()">&times;</div>
         <div class="item__img">
-            <img src="@/assets/products/tomatoes-1296x728-feature.jpg" alt="">
+            <img :src=product.fileURL :alt=product.name>
             <!-- <a :href="file.url">{{ product. }}</a> -->
         </div>
         <div class="item__info">
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { storage, auth } from '@/firebase/init'
+import { db, auth } from '@/firebase/init'
 import { updateDoc, deleteDoc, collection, doc, deleteField, onSnapshot } from 'firebase/firestore'
 
 export default {
@@ -44,7 +44,7 @@ export default {
 
             // Works, but there is another way to do this.
             function clearAllFields() {
-                const productRef = doc(storage, 'products', id);
+                const productRef = doc(db, 'products', id);
                 updateDoc(productRef, {
                     id: deleteField(),
                     date: deleteField(),
@@ -58,7 +58,7 @@ export default {
 
             // Second option => delete all products
             function deleteAllProducts() {
-                onSnapshot(collection(storage, 'products'), (querySnapshot) => {
+                onSnapshot(collection(db, 'products'), (querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         deleteDoc(doc.ref)
                     });
@@ -66,13 +66,13 @@ export default {
             }
 
             // Delete particular product
-            onSnapshot(doc(storage, "products", id), (doc) => {
+            onSnapshot(doc(db, "products", id), (doc) => {
                 deleteDoc(doc.ref);
             });
         },
         buyProduct() {
             const currentUser = auth.currentUser;
-            onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+            onSnapshot(collection(db, 'users'), (querySnapshot) => {
                 this.users = [];
                 querySnapshot.forEach((doc) => {
                     const user = {
@@ -96,7 +96,7 @@ export default {
                             }
                             const userMoney = truncate((currentArrayUser.money - this.product.price), 2);
                             
-                            updateDoc(doc(storage, 'users', currentArrayUser.id), {
+                            updateDoc(doc(db, 'users', currentArrayUser.id), {
                                 money: userMoney
                             });
                             console.log(userMoney);
@@ -112,7 +112,7 @@ export default {
         }
     },
     beforeMount() {
-        onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+        onSnapshot(collection(db, 'users'), (querySnapshot) => {
             this.users = [];
             querySnapshot.forEach((doc) => {
                 const user = {

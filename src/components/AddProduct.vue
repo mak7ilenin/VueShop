@@ -26,7 +26,7 @@
             <textarea class="form-control" id="product-description" rows="3" placeholder="Enter product description" v-model="description"></textarea>
 
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="customFile" @change="selectFile">
+                <input type="file" class="custom-file-input" id="customFile" ref="input" @change="selectFile">
                 <label class="custom-file-label" for="customFile" id="fileName">{{ fileName }}</label>
             </div>
 
@@ -38,8 +38,9 @@
 </template>
 
 <script>
-import { storage } from '@/firebase/init';
-import { addDoc, collection } from "firebase/firestore";
+import { db, storage, productsStorageRef } from '@/firebase/init';
+import { ref, uploadBytes } from 'firebase/storage';
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 
 export default {
     data() {
@@ -52,14 +53,28 @@ export default {
             description: '',
             
             // File
-            selectedFile: null,
+            fileData: null,
+            img: '',
             fileName: 'Choose file',
-            fileURL: null
+            fileURL: undefined
         }
     },
     methods: {
         sendProduct() {
-            if(this.name.trim() || this.category.trim() || this.price !== 0 || this.weight !== 0) {        
+            if(this.name.trim() || this.category.trim() || this.price !== 0 || this.weight !== 0) {     
+                // Push file to storage
+                const storageRef = ref(productsStorageRef, `${this.fileName}`);
+                uploadBytes(storageRef, this.fileData)
+                .then(() => {
+                    getDownloadURL(storageRef)
+                        .then((url) => {
+                            this.fileURL = url;
+                        })
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+                Promise.all()
                 const dateString = new Date();
                 const currentDateTime = 
                     dateString.getFullYear() 
@@ -68,14 +83,17 @@ export default {
                     + ' ' + ((dateString.getHours()).toString().length === 1 ? + '0' : '') + dateString.getHours()
                     + ':' + ((dateString.getMinutes()).toString().length === 1 ? + '0' : '') + dateString.getMinutes()
                     + ':' + dateString.getSeconds();
-                addDoc(collection(storage, 'products'), {
+                addDoc(collection(db, 'products'), {
                     date: currentDateTime,
                     name: this.name,
                     category: this.category,
                     price: this.price,
                     weight: this.weight,
                     description: this.description,
+                    fileURL: this.fileURL
                 });
+
+                // Clears all fields
                 this.name = '';
                 this.category = 'none';
                 this.price = '';
@@ -85,8 +103,23 @@ export default {
             }
         },
         selectFile(event) {
+            this.uploadValue = 0;
             this.fileName = event.target.files[0].name;
-            this.selectedFile = event.target.files[0];
+            this.fileData = event.target.files[0];
+            this.img = null;
+            // this.onUpload();
+        },
+        onUpload() {
+            // storageRef.on(`state_changed`, snapshot => {
+            //     this.uploadValue =(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // }, error => {console.error(error.message)},
+            // () => {
+            //     this.uploadValue = 100;
+            //     storageRef.snapshot.ref.getDownloadURL().then((url) => {
+            //         this.img = url,
+            //         console.log(this.img);
+            //     });
+            // });
         },
         closeForm() {
             $('#productForm').hide();

@@ -29,7 +29,7 @@
 
 <script>
 import router from '@/router';
-import { auth, storage } from '@/firebase/init';
+import { auth, db } from '@/firebase/init';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { onSnapshot, collection } from 'firebase/firestore';
 export default {
@@ -67,7 +67,7 @@ export default {
                     $('.log-in').removeClass('unlogged, unlogged-1');
                     $('.username').removeClass('unknown');
 
-                    onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+                    onSnapshot(collection(db, 'users'), (querySnapshot) => {
                         const usersList = [];
                         querySnapshot.forEach((doc) => {
                             const user = {

@@ -24,7 +24,7 @@ import AddProduct from '@/components/AddProduct'
 import Loader from '@/components/Loader'
 import ProductItem from '@/components/ProductItem'
 
-import { storage } from '@/firebase/init'
+import { db } from '@/firebase/init'
 import { collection, onSnapshot } from "firebase/firestore"; 
 
 export default {
@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         getProducts: async function() {
-            onSnapshot(collection(storage, 'products'), (querySnapshot) => {
+            onSnapshot(collection(db, 'products'), (querySnapshot) => {
                 this.products = [];
                 querySnapshot.forEach((doc) => {
                     const product = {
@@ -53,7 +53,8 @@ export default {
                         category: doc.data().category,
                         price: doc.data().price,
                         weight: doc.data().weight,
-                        description: doc.data().description
+                        description: doc.data().description,
+                        fileURL: doc.data().fileURL
                     }
                     this.products.push(product);
                 });
