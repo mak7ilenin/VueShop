@@ -13,6 +13,7 @@
             </ul>
         </div>
         <div class="header__profile">
+            <p>{{ user_money }}</p>
             <div class="profile__img">
                 <img src="../assets/profile.png" alt="profile" @click="openProfileDropdown">
             </div>
@@ -30,15 +31,16 @@
 
 <script>
 import router from '@/router';
-import { auth } from '@/firebase/init';
+import { auth, storage } from '@/firebase/init';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onSnapshot, collection } from 'firebase/firestore';
 export default {
     data() {
         return {
             user_name: '',
+            user_money: null,
             user_status: false,
             authed: false,
-            logo_path: '',
         }
     },
     methods: {
@@ -57,18 +59,18 @@ export default {
             onAuthStateChanged(auth, (user) => {
                 if(user) {
                     this.authed = true;
-                    this.logo_path = '/';
                     const userEmail = user.email;
                     this.user_name = userEmail;
                     this.user_status = true;
+
                     $('.log-in').removeClass('unlogged');
                     $('.user_email').removeClass('unknown');
                     $('.my-profile').removeClass('unlogged-1');
                 }else {
                     this.authed = false;
-                    this.logo_path = '';
                     this.user_name = '';
                     this.user_status = false;
+
                     $('.log-in').addClass('unlogged');
                     $('.user_email').addClass('unknown');
                     $('.my-profile').addClass('unlogged-1');
@@ -78,6 +80,21 @@ export default {
     },
     beforeMount() {
         this.isSignedIn();
+
+        onSnapshot(collection(storage, 'users'), (querySnapshot) => {
+            const usersList = [];
+            querySnapshot.forEach((doc) => {
+                const user = {
+                    userId: doc.data().userId,
+                    username: doc.data().username,
+                    money: doc.data().money
+                }
+                usersList.push(user);
+            });
+            const currentUser = auth.currentUser;
+            const thisUser = usersList.find(user => user.userId === currentUser.uid);
+            this.user_money = thisUser.money;
+        });
     }
 }
 </script>
@@ -125,6 +142,12 @@ header {
 .header__profile {
     width: 10%;
     height: 100%;
+    display: flex;
+    align-items: center;
+}
+.header__profile p {
+    color: #000;
+    font-weight: bold;
 }
 .profile__img {
     width: 100%;

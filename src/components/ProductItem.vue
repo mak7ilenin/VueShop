@@ -93,13 +93,18 @@ export default {
             console.log(currentArrayUser);
                 if(currentArrayUser.money >= this.product.price) {
                     try {
-                        var userMoney = currentArrayUser.money - this.product.price;
+                        // Function to convert the number
+                        function truncate(number, index = 2) {
+                            return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+                        }
+                        const userMoney = truncate((currentArrayUser.money - this.product.price), 2);
+                        
                         updateDoc(doc(storage, 'users', currentArrayUser.id), {
                             money: userMoney
                         });
                         console.log(userMoney);
                     } catch(e) {
-                        alert(e.message);
+                        alert('Something went wrong ...');
                     }
                 } else {
                     alert('Not enough money!');
