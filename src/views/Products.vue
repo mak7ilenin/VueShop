@@ -54,6 +54,7 @@ export default {
                         price: doc.data().price,
                         weight: doc.data().weight,
                         description: doc.data().description,
+                        fileName: doc.data().fileName,
                         fileURL: doc.data().fileURL
                     }
                     this.products.push(product);

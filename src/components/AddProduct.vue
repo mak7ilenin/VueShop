@@ -67,6 +67,7 @@ export default {
                 const productPrice = this.price;
                 const productWeight = this.weight;
                 const productDescription = this.description;
+                const productFileName = this.fileName;
 
                 // Push file to storage
                 const storageRef = ref(productsStorageRef, this.fileName);
@@ -91,6 +92,7 @@ export default {
                                         price: productPrice,
                                         weight: productWeight,
                                         description: productDescription,
+                                        fileName: productFileName,
                                         fileURL: this.fileURL
                                     });            
                                 }

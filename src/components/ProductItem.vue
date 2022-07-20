@@ -5,7 +5,7 @@
     <div class="item" :id="product.id">
         <div class="item__delete__btn" @click="deleteProduct()">&times;</div>
         <div class="item__img">
-            <img :src=product.fileURL :alt=product.name>>
+            <img :src=product.fileURL :alt=product.name>
         </div>
         <div class="item__info">
             <h3>{{ product.name }}</h3>
@@ -29,8 +29,9 @@
 <script>
 import CartAlert from '@/components/CartAlert'
 
-import { db, auth } from '@/firebase/init'
-import { updateDoc, deleteDoc, collection, doc, onSnapshot } from 'firebase/firestore'
+import { db, auth, productsStorageRef } from '@/firebase/init';
+import { updateDoc, deleteDoc, collection, doc, onSnapshot } from 'firebase/firestore';
+import { deleteObject, ref } from '@firebase/storage';
 
 export default {
     data() {
@@ -62,9 +63,17 @@ export default {
                 });
             }
 
-            // Delete particular product
+            // Delete particular product image from storage
+            const thisProductFileName = this.product.fileName;
+            const deleteRef = ref(productsStorageRef, thisProductFileName);
+            deleteObject(deleteRef).catch((err) => {
+                console.error('Product image error ' + err.message);
+            });
+            // Delete particular product info
             onSnapshot(doc(db, "products", id), (doc) => {
-                deleteDoc(doc.ref);
+                deleteDoc(doc.ref).catch((err) => {
+                    console.error('Product error ' + err.message);
+                });
             });
         },
         buyProduct() {
@@ -82,7 +91,6 @@ export default {
                 });
             });
             const currentArrayUser = this.users.find(user => user.userId === currentUser.uid)
-            console.log(currentArrayUser);
                 if(currentArrayUser.money >= this.product.price) {
                     let confirmPurchase = 'Are you sure you want to buy this product?';
                     if(confirm(confirmPurchase)) {
@@ -96,7 +104,6 @@ export default {
                             updateDoc(doc(db, 'users', currentArrayUser.id), {
                                 money: userMoney
                             });
-                            console.log(userMoney);
                         } catch(e) {
                             alert('Something went wrong ...');
                         }
