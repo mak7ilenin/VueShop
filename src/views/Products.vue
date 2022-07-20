@@ -120,13 +120,13 @@ h2 {
     justify-content: space-around;
     flex-wrap: wrap;
     margin: 50px auto;
-    margin-top: 20px;
+    margin-top: 40px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
     transition: ease all 1s;
 
     position: relative;
     opacity: 0;
-    top: 50px;
+    top: 30px;
 }
 .animateItem {
     top: 0px !important;

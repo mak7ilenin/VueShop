@@ -1,35 +1,45 @@
 <template>
+    <CartAlert
+        :product_name="product_name"
+    />
     <div class="item" :id="product.id">
-        <div class="item__close-btn" @click="deleteProduct()">&times;</div>
+        <div class="item__delete__btn" @click="deleteProduct()">&times;</div>
         <div class="item__img">
-            <img :src=product.fileURL :alt=product.name>
-            <!-- <a :href="file.url">{{ product. }}</a> -->
+            <img :src=product.fileURL :alt=product.name>>
         </div>
         <div class="item__info">
             <h3>{{ product.name }}, {{ product.weight }} kg</h3>
             <p class="item__category">{{ product.category }}</p>
             <p class="item__price">
-                <!-- <span class="dollars">2</span><sup>64</sup><span class="currency">$</span> -->
                 <span class="dollars">{{ product.price }}</span><span class="currency">$</span>
             </p>
-            <p class="item__desc">{{ product.description }}</p>
+            <div class="item__desc__container">
+                <p class="item__desc" v-if="product.description !== ''">{{ product.description }}</p>
+                <p class="item__desc" v-if="product.description === ''">Description is empty . . .</p>
+            </div>
         </div>
         <div class="item__btns">
-            <a class="cart-btn">Add to cart</a>
+            <a class="cart-btn" @click="addToCart()">Add to cart</a>
             <a class="buy-btn" @click="buyProduct()">Buy</a>
         </div>
     </div>
 </template>
 
 <script>
+import CartAlert from '@/components/CartAlert'
+
 import { db, auth } from '@/firebase/init'
-import { updateDoc, deleteDoc, collection, doc, deleteField, onSnapshot } from 'firebase/firestore'
+import { updateDoc, deleteDoc, collection, doc, onSnapshot } from 'firebase/firestore'
 
 export default {
     data() {
         return {
-            users: []
+            users: [],
+            product_name: ''
         }
+    },
+    components: {
+        CartAlert
     },
     props: {
         product: {
@@ -41,20 +51,6 @@ export default {
         deleteProduct() {
             // Clicked product id
             let id = this.product.id;
-
-            // Works, but there is another way to do this.
-            function clearAllFields() {
-                const productRef = doc(db, 'products', id);
-                updateDoc(productRef, {
-                    id: deleteField(),
-                    date: deleteField(),
-                    name: deleteField(),
-                    category: deleteField(),
-                    price: deleteField(),
-                    weight: deleteField(),
-                    description: deleteField()
-                });
-            }
 
             // Second option => delete all products
             function deleteAllProducts() {
@@ -109,6 +105,21 @@ export default {
                 } else {
                     alert('Not enough money!');
                 }
+        },
+        addToCart() {
+            let id = this.product.id;
+            if(!$('.cart_alert').hasClass('active_alert')) {
+                $('.cart_alert').addClass('active_alert');
+                this.product_name = this.product.name
+                setTimeout(() => {
+                    $('.cart_alert').removeClass('active_alert');
+                    setTimeout(() => {
+                        this.product_name = '';
+                    }, 500);
+                }, 3000);
+            } else {
+                return;
+            }
         }
     },
     beforeMount() {
@@ -141,7 +152,7 @@ export default {
     align-items: center;
     justify-content: center;
 }
-.item__close-btn {
+.item__delete__btn {
     width: 40px;
     height: 40px;
     font-size: 28px;
@@ -161,7 +172,7 @@ export default {
     cursor: pointer;
     transition: all .3s;
 }
-.item__close-btn:hover {
+.item__delete__btn:hover {
     background-color: #ff6565;
 }
 .item__img {
@@ -214,15 +225,21 @@ export default {
 .item__price .currency {
     margin-left: 5px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-style: italic;
-    font-size: 22px;
+    /* font-style: italic; */
+    /* font-size: 22px; */
+    font-size: 28px;
     font-weight: 400 !important;
 }
-.item__desc {
+.item__desc__container {
     height: 82px;
-    overflow: hidden;
-    word-wrap: break-word;
     padding: 10px 15px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.item__desc {
+    word-wrap: break-word;
     text-align: center;
 }
 .item__btns {

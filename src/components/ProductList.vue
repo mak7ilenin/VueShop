@@ -1,7 +1,7 @@
 <template>
     <ProductItem 
         v-for="product in products" 
-        v-bind:product="product"
+        :product="product"
     />
 </template>
 

@@ -26,7 +26,7 @@
             <textarea class="form-control" id="product-description" rows="3" placeholder="Enter product description" v-model="description"></textarea>
 
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="customFile" ref="input" @change="selectFile">
+                <input type="file" class="custom-file-input" id="customFile" @change="selectFile">
                 <label class="custom-file-label" for="customFile" id="fileName">{{ fileName }}</label>
             </div>
 
@@ -40,7 +40,7 @@
 <script>
 import { db, productsStorageRef } from '@/firebase/init';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { addDoc, collection, updateDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 
 export default {
     data() {
@@ -99,25 +99,6 @@ export default {
                                 console.error(err);
                             });
                     });
-                
-                // function uploadAllProductInfo() {
-                //     const currentDateTime = 
-                //         dateString.getFullYear() 
-                //         + '/' + ((dateString.getDate()).toString().length === 1 ? + '0' : '') + dateString.getDate()
-                //         + '/' + ((dateString.getMonth()).toString().length === 1 ? + '0' : '') + dateString.getMonth()
-                //         + ' ' + ((dateString.getHours()).toString().length === 1 ? + '0' : '') + dateString.getHours()
-                //         + ':' + ((dateString.getMinutes()).toString().length === 1 ? + '0' : '') + dateString.getMinutes()
-                //         + ':' + dateString.getSeconds();
-                //     addDoc(collection(db, 'products'), {
-                //         date: currentDateTime,
-                //         name: productName,
-                //         category: productCategory,
-                //         price: productPrice,
-                //         weight: productWeight,
-                //         description: productDescription,
-                //         fileURL: productURL
-                //     });            
-                // }
 
                 // Clears all fields
                 this.name = '';
@@ -131,18 +112,6 @@ export default {
         selectFile(event) {
             this.fileName = event.target.files[0].name;
             this.fileData = event.target.files[0];
-        },
-        onUpload() {
-            // storageRef.on(`state_changed`, snapshot => {
-            //     this.uploadValue =(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            // }, error => {console.error(error.message)},
-            // () => {
-            //     this.uploadValue = 100;
-            //     storageRef.snapshot.ref.getDownloadURL().then((url) => {
-            //         this.img = url,
-            //         console.log(this.img);
-            //     });
-            // });
         },
         closeForm() {
             $('#productForm').hide();
