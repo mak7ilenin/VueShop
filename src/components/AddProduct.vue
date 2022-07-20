@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import { db, storage, productsStorageRef } from '@/firebase/init';
-import { ref, uploadBytes } from 'firebase/storage';
+import { db, productsStorageRef } from '@/firebase/init';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection, updateDoc } from "firebase/firestore";
 
 export default {
@@ -54,44 +54,70 @@ export default {
             
             // File
             fileData: null,
-            img: '',
             fileName: 'Choose file',
-            fileURL: undefined
+            fileURL: ''
         }
     },
     methods: {
         sendProduct() {
             if(this.name.trim() || this.category.trim() || this.price !== 0 || this.weight !== 0) {     
+                
+                const productName = this.name;
+                const productCategory = this.category;
+                const productPrice = this.price;
+                const productWeight = this.weight;
+                const productDescription = this.description;
+
                 // Push file to storage
-                const storageRef = ref(productsStorageRef, `${this.fileName}`);
-                uploadBytes(storageRef, this.fileData)
-                .then(() => {
-                    getDownloadURL(storageRef)
-                        .then((url) => {
-                            this.fileURL = url;
-                        })
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-                Promise.all()
+                const storageRef = ref(productsStorageRef, this.fileName);
                 const dateString = new Date();
-                const currentDateTime = 
-                    dateString.getFullYear() 
-                    + '/' + ((dateString.getDate()).toString().length === 1 ? + '0' : '') + dateString.getDate()
-                    + '/' + ((dateString.getMonth()).toString().length === 1 ? + '0' : '') + dateString.getMonth()
-                    + ' ' + ((dateString.getHours()).toString().length === 1 ? + '0' : '') + dateString.getHours()
-                    + ':' + ((dateString.getMinutes()).toString().length === 1 ? + '0' : '') + dateString.getMinutes()
-                    + ':' + dateString.getSeconds();
-                addDoc(collection(db, 'products'), {
-                    date: currentDateTime,
-                    name: this.name,
-                    category: this.category,
-                    price: this.price,
-                    weight: this.weight,
-                    description: this.description,
-                    fileURL: this.fileURL
-                });
+                uploadBytes(storageRef, this.fileData)
+                    .then(() => {
+                        getDownloadURL(storageRef, this.fileName)
+                            .then((url) => {
+                                this.fileURL = url;
+                                if(this.fileURL !== '') {
+                                    const currentDateTime = 
+                                        dateString.getFullYear() 
+                                        + '/' + ((dateString.getDate()).toString().length === 1 ? + '0' : '') + dateString.getDate()
+                                        + '/' + ((dateString.getMonth()).toString().length === 1 ? + '0' : '') + dateString.getMonth()
+                                        + ' ' + ((dateString.getHours()).toString().length === 1 ? + '0' : '') + dateString.getHours()
+                                        + ':' + ((dateString.getMinutes()).toString().length === 1 ? + '0' : '') + dateString.getMinutes()
+                                        + ':' + dateString.getSeconds();
+                                    addDoc(collection(db, 'products'), {
+                                        date: currentDateTime,
+                                        name: productName,
+                                        category: productCategory,
+                                        price: productPrice,
+                                        weight: productWeight,
+                                        description: productDescription,
+                                        fileURL: this.fileURL
+                                    });            
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            });
+                    });
+                
+                // function uploadAllProductInfo() {
+                //     const currentDateTime = 
+                //         dateString.getFullYear() 
+                //         + '/' + ((dateString.getDate()).toString().length === 1 ? + '0' : '') + dateString.getDate()
+                //         + '/' + ((dateString.getMonth()).toString().length === 1 ? + '0' : '') + dateString.getMonth()
+                //         + ' ' + ((dateString.getHours()).toString().length === 1 ? + '0' : '') + dateString.getHours()
+                //         + ':' + ((dateString.getMinutes()).toString().length === 1 ? + '0' : '') + dateString.getMinutes()
+                //         + ':' + dateString.getSeconds();
+                //     addDoc(collection(db, 'products'), {
+                //         date: currentDateTime,
+                //         name: productName,
+                //         category: productCategory,
+                //         price: productPrice,
+                //         weight: productWeight,
+                //         description: productDescription,
+                //         fileURL: productURL
+                //     });            
+                // }
 
                 // Clears all fields
                 this.name = '';
@@ -103,11 +129,8 @@ export default {
             }
         },
         selectFile(event) {
-            this.uploadValue = 0;
             this.fileName = event.target.files[0].name;
             this.fileData = event.target.files[0];
-            this.img = null;
-            // this.onUpload();
         },
         onUpload() {
             // storageRef.on(`state_changed`, snapshot => {

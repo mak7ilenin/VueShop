@@ -8,13 +8,13 @@
     <div class="loader__container">
         <Loader v-if="loading"/>
     </div>
+    <div class="products_check" v-if="!products_check">
+        There are no products available ...
+    </div>
     <div class="items__container">
         <ProductList
             v-bind:products="products"
         />
-        <div class="products_check" v-if="!products_check">
-            There are no products available ...
-        </div>
     </div>
 </template>
 
@@ -62,7 +62,7 @@ export default {
                 $('.loader__container').hide();
                 if(this.products.length === 0) {
                     this.products_check = false;
-                }else {
+                } else {
                     this.products_check = true;
                     $('.items__container').addClass('animateItem')
                 }
@@ -133,6 +133,7 @@ h2 {
     opacity: 1 !important;
 }
 .products_check {
+    margin-top: 50px;
     font-size: 36px;
     color: #fff;
     animation: pulse 2s infinite;
