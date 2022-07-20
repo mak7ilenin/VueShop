@@ -8,14 +8,15 @@
             <img :src=product.fileURL :alt=product.name>>
         </div>
         <div class="item__info">
-            <h3>{{ product.name }}, {{ product.weight }} kg</h3>
+            <h3>{{ product.name }}</h3>
+            <h4>{{ product.weight }} kg</h4>
             <p class="item__category">{{ product.category }}</p>
             <p class="item__price">
                 <span class="dollars">{{ product.price }}</span><span class="currency">$</span>
             </p>
             <div class="item__desc__container">
                 <p class="item__desc" v-if="product.description !== ''">{{ product.description }}</p>
-                <p class="item__desc" v-if="product.description === ''">Description is empty . . .</p>
+                <p class="item__desc empty__desc" v-if="product.description === ''">No description . . .</p>
             </div>
         </div>
         <div class="item__btns">
@@ -197,6 +198,10 @@ export default {
     height: auto;
 }
 .item__info h3 {
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.377);
+    overflow: hidden;
     font-size: 24px;
     font-weight: 500;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -205,10 +210,25 @@ export default {
     padding: 10px;
     letter-spacing: 1px;
 }
+.item__info h4 {
+    height: 34px;
+    overflow: hidden;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgb(17, 85, 59);
+    margin: 0 !important;
+    padding: 5px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid;
+    box-shadow: 0 1px 10px 0 rgba(255, 255, 255, 0.534);
+}
 .item__category {
     margin: 0;
     margin-left: 5px;
     font-size: 13px;
+    font-weight: 600;
     color: #aaaaaa;
     text-align: left;
 }
@@ -232,15 +252,19 @@ export default {
 }
 .item__desc__container {
     height: 82px;
-    padding: 10px 15px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .item__desc {
+    width: 100%;
+    padding: 10px 15px;
     word-wrap: break-word;
     text-align: center;
+}
+.empty__desc {
+    font-style: italic;
 }
 .item__btns {
     width: 100%;
