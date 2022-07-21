@@ -12,7 +12,10 @@
             </ul>
         </div>
         <div class="header__profile">
-            <p v-if="authed">{{ user_money }}$</p>
+            <div class="user__money" v-if="authed">{{ user_money }}$</div>
+            <div class="cart__container">
+                <img src="../assets/shopping-cart.png" alt="cart">
+            </div>
             <div class="profile__img">
                 <img src="../assets/profile.png" alt="profile" @click="openProfileDropdown">
             </div>
@@ -120,7 +123,7 @@ header {
     cursor: pointer;
 }
 .header__list {
-    width: 78%;
+    width: 74%;
     display: flex;
     justify-content: center;
 }
@@ -138,18 +141,36 @@ header {
     font-weight: 600;
 }
 .header__profile {
-    width: 11%;
+    width: 13%;
     height: 100%;
     display: flex;
     align-items: center;
 }
-.header__profile p {
+.user__money {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
     color: #000;
     font-weight: bold;
     font-size: 20px;
 }
+.cart__container {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cart__container > img {
+    width: 90px;
+    object-fit: cover;
+    cursor: pointer;
+}
 .profile__img {
-    width: 100%;
+    width: 40%;
     height: 100%;
     display: flex;
     justify-content: center;

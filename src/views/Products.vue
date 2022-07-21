@@ -1,10 +1,10 @@
 <template>
+    <CartAlert/>
     <h2>Product list</h2>
     <button class="add-product" @click="show = !show">Add product</button>
     <AddProduct
         v-if="show"
     />
-    <p v-else></p>
     <div class="loader__container">
         <Loader v-if="loading"/>
     </div>
@@ -25,7 +25,8 @@ import Loader from '@/components/Loader'
 import ProductItem from '@/components/ProductItem'
 
 import { db } from '@/firebase/init'
-import { collection, onSnapshot } from "firebase/firestore"; 
+import { collection, onSnapshot } from "firebase/firestore";
+import CartAlert from '@/components/CartAlert.vue' 
 
 export default {
     data() {
@@ -37,11 +38,12 @@ export default {
         }
     },
     components: {
-        ProductList,
-        AddProduct,
-        Loader,
-        ProductItem
-    },
+    ProductList,
+    AddProduct,
+    Loader,
+    ProductItem,
+    CartAlert
+},
     methods: {
         getProducts: async function() {
             onSnapshot(collection(db, 'products'), (querySnapshot) => {

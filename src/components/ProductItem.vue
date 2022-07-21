@@ -1,7 +1,4 @@
 <template>
-    <CartAlert
-        :product_name="product_name"
-    />
     <div class="item" :id="product.id">
         <div class="item__delete__btn" @click="deleteProduct()">&times;</div>
         <div class="item__img">
@@ -117,12 +114,12 @@ export default {
         addToCart() {
             let id = this.product.id;
             if(!$('.cart_alert').hasClass('active_alert')) {
+                $('.cart_alert').show();
                 $('.cart_alert').addClass('active_alert');
-                this.product_name = this.product.name
                 setTimeout(() => {
                     $('.cart_alert').removeClass('active_alert');
                     setTimeout(() => {
-                        this.product_name = '';
+                        $('.cart_alert').hide();
                     }, 500);
                 }, 3000);
             } else {
