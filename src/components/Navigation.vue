@@ -14,7 +14,7 @@
         <div class="header__profile">
             <div class="user__money" v-if="authed">{{ user_money }}$</div>
             <div class="cart__container">
-                <img src="../assets/shopping-cart.png" alt="cart">
+                <router-link to="/my-cart"><img src="../assets/shopping-cart.png" alt="cart"></router-link>
             </div>
             <div class="profile__img">
                 <img src="../assets/profile.png" alt="profile" @click="openProfileDropdown">
@@ -164,7 +164,7 @@ header {
     justify-content: center;
     align-items: center;
 }
-.cart__container > img {
+.cart__container img {
     width: 90px;
     object-fit: cover;
     cursor: pointer;
