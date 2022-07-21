@@ -21,6 +21,10 @@ const routes = [
     {
         path: '/editProduct',
         component: () => import('@/views/EditProduct.vue')
+    },
+    {
+        path: '/my-cart',
+        component: () => import('@/views/MyCart.vue')
     }
 ];
 const router = createRouter({
