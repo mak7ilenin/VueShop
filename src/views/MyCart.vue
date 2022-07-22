@@ -53,6 +53,9 @@ export default {
     flex-wrap: nowrap;
     justify-content: flex-start;
     border: 1px solid;
+    background-image: url('../assets/—Pngtree—gradient\ l\ green\ solid\ triangle_4481122.png');
+    background-repeat: no-repeat;
+    background-size: cover;
     background-color: rgb(255, 255, 255);
 }
 .item__name {
@@ -88,8 +91,12 @@ export default {
     padding: 10px 15px;
     border-radius: 5px;
     font-size: 22px;
+    transition: ease all .3s;
     cursor: pointer;
     background-color: #56b763;
+}
+.item__btn a:hover {
+    transform: scale(1.02);
 }
 .item__image {
     width: 25%;
@@ -99,5 +106,7 @@ export default {
     height: 100%;
     object-fit: cover;
 }
-
+.cart__container .items__container .item .item__image img {
+    cursor: default;
+}
 </style>
