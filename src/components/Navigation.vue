@@ -145,6 +145,7 @@ header {
     height: 100%;
     display: flex;
     align-items: center;
+    margin-right: 20px;
 }
 .user__money {
     width: 20%;
