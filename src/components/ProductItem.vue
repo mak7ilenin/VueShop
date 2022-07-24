@@ -27,7 +27,7 @@
 import CartAlert from '@/components/CartAlert'
 
 import { db, auth, productsStorageRef } from '@/firebase/init';
-import { updateDoc, deleteDoc, collection, doc, onSnapshot } from 'firebase/firestore';
+import { updateDoc, deleteDoc, collection, doc, onSnapshot, setDoc, addDoc } from 'firebase/firestore';
 import { deleteObject, ref } from '@firebase/storage';
 
 export default {
@@ -114,6 +114,26 @@ export default {
         addToCart() {
             let id = this.product.id;
             if(!$('.cart_alert').hasClass('active_alert')) {
+                const currentUser = auth.currentUser;
+                onSnapshot(collection(db, 'users'), (querySnapshot) => {
+                    this.users = [];
+                    querySnapshot.forEach((doc) => {
+                        const user = {
+                            id: doc.id,
+                            cartItems: doc.data().cartItems
+                        }
+                        this.users.push(user);
+                    });
+                });
+                const currentArrayUser = this.users.find(user => user.userId === currentUser.uid);
+                const newCartRef = doc(collection(db, currentArrayUser.id));
+
+                updateDoc(doc(db, 'users', currentArrayUser.id), {
+                    cartItems: {
+                        productId: id
+                    }
+                });
+
                 $('.cart_alert').show();
                 $('.cart_alert').addClass('active_alert');
                 setTimeout(() => {

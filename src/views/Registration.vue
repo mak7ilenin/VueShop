@@ -16,7 +16,7 @@
 <script>
 import { addDoc, collection } from 'firebase/firestore';
 import { db, auth } from '@/firebase/init';
-import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import router from '@/router';
 export default {
     data() {
@@ -46,7 +46,8 @@ export default {
                         addDoc(collection(db, 'users'), {
                             userId: userId,
                             username: this.username,
-                            money: this.money
+                            money: this.money,
+                            cartItems: {}
                         });
                         router.replace('/log-in');
                         // alert('Successfully registered!');

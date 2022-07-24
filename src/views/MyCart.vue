@@ -150,7 +150,7 @@ export default {
 .cart__image img {
     width: 100%;
     height: 100%;
-    border-radius: 0 0px 0px 100px;
+    border-radius: 0 0 0 100px;
     object-fit: cover;
 }
 .cart__container .carts__container .cart .cart__image img {
