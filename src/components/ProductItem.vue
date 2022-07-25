@@ -82,7 +82,8 @@ export default {
                         id: doc.id,
                         userId: doc.data().userId,
                         username: doc.data().username,
-                        money: doc.data().money
+                        money: doc.data().money,
+                        cartItems: doc.data().cartItems
                     }
                     this.users.push(user);
                 });
@@ -126,12 +127,16 @@ export default {
                     });
                 });
                 const currentArrayUser = this.users.find(user => user.userId === currentUser.uid);
-                const newCartRef = doc(collection(db, currentArrayUser.id));
+                let cartItems = currentArrayUser.cartItems;
+                cartItems.push(id);
 
-                updateDoc(doc(db, 'users', currentArrayUser.id), {
-                    cartItems: {
-                        productId: id
-                    }
+                console.log(cartItems);
+
+                setDoc(doc(db, 'users', currentArrayUser.id), {
+                    money: currentArrayUser.money,
+                    userId: currentArrayUser.userId,
+                    username: currentArrayUser.username,
+                    cartItems: cartItems
                 });
 
                 $('.cart_alert').show();
@@ -155,7 +160,8 @@ export default {
                     id: doc.id,
                     userId: doc.data().userId,
                     username: doc.data().username,
-                    money: doc.data().money
+                    money: doc.data().money,
+                    cartItems: doc.data().cartItems
                 }
                 this.users.push(user);
             });
