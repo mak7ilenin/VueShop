@@ -1,15 +1,16 @@
 <template>
   <div class="wrapper">
     <Navigation 
-      :authUser="authUser"
       :authed="authed"
     />
+    <AuthUserInfo :authUser="authUser"/>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Navigation from '@/components/Navigation';
+import AuthUserInfo from '@/components/AuthUserInfo';
 
 import { db, auth } from '@/firebase/init';
 import { onSnapshot, collection } from 'firebase/firestore';
@@ -19,14 +20,13 @@ export default {
   data() {
     return {
       authUser: null,
-      user_name: undefined,
-      user_money: 0,
       authed: false
     }
   },
   name: 'App',
   components: {
-    Navigation
+    Navigation,
+    AuthUserInfo
   },
   methods: {
     isSignedIn: async function() {
@@ -51,9 +51,6 @@ export default {
                 });
                 const authUser = userList.find(user => user.userId === (auth.currentUser).uid);
                 this.authUser = authUser;
-                
-                this.user_money = authUser.money;
-                this.user_name = authUser.username;
             });
         } else {
             this.authed = false;
