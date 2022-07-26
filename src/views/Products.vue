@@ -38,12 +38,12 @@ export default {
         }
     },
     components: {
-    ProductList,
-    AddProduct,
-    Loader,
-    ProductItem,
-    CartAlert
-},
+        ProductList,
+        AddProduct,
+        Loader,
+        ProductItem,
+        CartAlert
+    },
     methods: {
         getProducts: async function() {
             onSnapshot(collection(db, 'products'), (querySnapshot) => {

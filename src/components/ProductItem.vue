@@ -27,7 +27,7 @@
 import CartAlert from '@/components/CartAlert'
 
 import { db, auth, productsStorageRef } from '@/firebase/init';
-import { updateDoc, deleteDoc, collection, doc, onSnapshot, setDoc, addDoc } from 'firebase/firestore';
+import { updateDoc, deleteDoc, collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { deleteObject, ref } from '@firebase/storage';
 
 export default {
@@ -82,8 +82,7 @@ export default {
                         id: doc.id,
                         userId: doc.data().userId,
                         username: doc.data().username,
-                        money: doc.data().money,
-                        cartItems: doc.data().cartItems
+                        money: doc.data().money
                     }
                     this.users.push(user);
                 });

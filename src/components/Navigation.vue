@@ -32,15 +32,22 @@
 
 <script>
 import router from '@/router';
-import { auth, db } from '@/firebase/init';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { onSnapshot, collection } from 'firebase/firestore';
+import { auth } from '@/firebase/init';
+import { signOut } from 'firebase/auth';
 export default {
     data() {
         return {
             user_name: undefined,
             user_money: 0,
-            authed: false,
+            authed: false
+        }
+    },
+    props: {
+        authUser: {
+            type: Object
+        },
+        authed: {
+            type: Boolean
         }
     },
     methods: {
@@ -60,42 +67,12 @@ export default {
             .catch((e) => {
                 alert(e.message);
             });
-        },
-        isSignedIn: async function() {
-            onAuthStateChanged(auth, (user) => {
-                if(user) {
-                    this.authed = true;
-
-                    $('.log-in').removeClass('unlogged');
-                    $('.log-in').removeClass('unlogged, unlogged-1');
-                    $('.username').removeClass('unknown');
-
-                    onSnapshot(collection(db, 'users'), (querySnapshot) => {
-                        const usersList = [];
-                        querySnapshot.forEach((doc) => {
-                            const user = {
-                                userId: doc.data().userId,
-                                username: doc.data().username,
-                                money: doc.data().money
-                            }
-                            usersList.push(user);
-                        });
-                        const thisUser = usersList.find(user => user.userId === (auth.currentUser).uid);
-                        this.user_money = thisUser.money;
-                        this.user_name = thisUser.username;
-                    });
-                }else {
-                    this.authed = false;
-
-                    $('.log-in').addClass('unlogged');
-                    $('.log-in').addClass('unlogged-1');
-                    $('.username').addClass('unknown');
-                }
-            });
         }
     },
-    beforeMount() {
-        this.isSignedIn();
+    created: function() {
+        this.user_name = this.authUser.username;
+        this.user_money = this.authUser.money;
+        this.authed = this.authed;
     }
 }
 </script>

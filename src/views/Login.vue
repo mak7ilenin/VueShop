@@ -2,7 +2,7 @@
     <form class="login__form" @submit.prevent="onLogin">
         <h2>Sign in</h2>
         <p class="empty-inputs" v-if="empty">Please fill in the all fields!</p>
-        <p>{{ errorMessage}}</p>
+        <p>{{ errorMessage }}</p>
 
         <input type="text" placeholder="Email" v-model="email">
         <input type="password" placeholder="Password" v-model="password">
@@ -35,7 +35,7 @@ export default {
             if(this.email.trim() === '' || this.password.trim() === '') {
                 this.empty = true;
                 return;
-            }else {
+            } else {
                 this.empty = false;
                 signInWithEmailAndPassword(auth, this.email, this.password)
                     .then(() => {
