@@ -1,5 +1,5 @@
 <template>
-    <MyCart :authUser="authUser"/>
+    <!-- <MyCart :authUser="authUser"/> -->
     <div class="user__info"></div>
 </template>
 

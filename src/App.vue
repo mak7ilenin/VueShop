@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <Navigation 
+      :authUser="authUser"
       :authed="authed"
     />
     <AuthUserInfo :authUser="authUser"/>
