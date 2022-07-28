@@ -19,14 +19,7 @@
 </template>
 
 <script>
-import { db, auth } from '@/firebase/init';
-import { getDoc, collection } from 'firebase/firestore';
 export default {
-    data() {
-        return {
-            users: []
-        }
-    },
     props: {
         cartItem: {
             type: Object,

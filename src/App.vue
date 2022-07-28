@@ -13,7 +13,7 @@
             </ul>
         </div>
         <div class="header__profile">
-            <div class="user__money" v-if="authed">{{ authUser.money }}$</div>
+            <div class="user__money" v-if="authed">{{ money }}$</div>
             <div class="cart__container">
                 <router-link to="/my-cart" v-if="authed"><img src="@/assets/shopping-cart.png" alt="cart"></router-link>
             </div>
@@ -23,39 +23,35 @@
         </div>
         <div class="profile__dropdown">
             <ul>
-                <li class="username profile__dropdown__btn">{{ authUser.username }}</li>
+                <li class="username profile__dropdown__btn">{{ username }}</li>
                 <router-link to="/log-in"><li class="log-in profile__dropdown__btn">Log in</li></router-link>
                 <li class="sign-out profile__dropdown__btn" @click="signOut" v-if="authed">Sign out</li>
             </ul>
         </div>
     </header>
 
-    <AuthUserInfo :authUser="authUser"/>
-    <router-view/>
+    <router-view :authUser="authUser"/>
   </div>
 </template>
 
 <script>
-import Navigation from '@/components/Navigation';
-import AuthUserInfo from '@/components/AuthUserInfo';
+import router from '@/router';
 
 import { db, auth } from '@/firebase/init';
 import { onSnapshot, collection } from 'firebase/firestore';
 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import router from '@/router';
 
 export default {
+  name: 'App',
   data() {
     return {
       authUser: null,
-      authed: false
+      authed: false,
+
+      username: null,
+      money: 0
     }
-  },
-  name: 'App',
-  components: {
-    Navigation,
-    AuthUserInfo
   },
   methods: {
     openProfileDropdown() {
@@ -65,6 +61,7 @@ export default {
             if($trigger !== event.target && !$trigger.has(event.target).length){
                 $(".profile__dropdown").slideUp(400, 'swing');
             }            
+            
         });
     },
     signOut() {
@@ -79,10 +76,6 @@ export default {
     getAuthUser() {
       onAuthStateChanged(auth, (user) => {
         if(user) {
-            this.authed = true;
-            $('.log-in').removeClass('unlogged');
-            $('.log-in').removeClass('unlogged, unlogged-1');
-            $('.username').removeClass('unknown');
   
             onSnapshot(collection(db, 'users'), (querySnapshot) => {
                 const userList = [];
@@ -98,6 +91,14 @@ export default {
                 });
                 const authUser = userList.find(user => user.userId === (auth.currentUser).uid);
                 this.authUser = authUser;
+
+                this.username = authUser.username;
+                this.money = authUser.money;
+
+                this.authed = true;
+                $('.log-in').removeClass('unlogged');
+                $('.log-in').removeClass('unlogged, unlogged-1');
+                $('.username').removeClass('unknown');
             });
         } else {
             this.authed = false;
