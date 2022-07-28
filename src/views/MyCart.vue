@@ -15,17 +15,20 @@
 <script>
 import { db, auth } from '@/firebase/init';
 import { collection, onSnapshot } from 'firebase/firestore';
+
 import CartList from '@/components/CartList.vue';
+import Loader from '@/components/Loader.vue';
 export default {
     components: {
-        CartList
+        CartList,
+        Loader
     },
     data() {
         return {
             carts: [],
             users: [],
             authUser: null,
-            loading: false
+            loading: true
         }
     },
     beforeMount() {
@@ -41,14 +44,19 @@ export default {
                 }
                 this.users.push(user);
             });
+            this.getCart();
         });
     },
-    beforeUpdate() {
-        // To find auth user cart
-        const currentUser = auth.currentUser;
-        this.authUser = this.users.find(user => user.userId === currentUser.uid);
-        
-        this.authUser.cartItems
+    methods: {
+        getCart() {
+            // To find auth user cart
+            const currentUser = auth.currentUser;
+            this.authUser = this.users.find(user => user.userId === currentUser.uid);
+    
+            // To fill the cart list
+            this.carts = this.authUser.cartItems;
+            this.loading = false;
+        }
     }
 }
 </script>

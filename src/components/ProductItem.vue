@@ -127,7 +127,15 @@ export default {
                 });
                 const currentArrayUser = this.users.find(user => user.userId === currentUser.uid);
                 let cartItems = currentArrayUser.cartItems;
-                cartItems.push(id);
+                cartItems.push({
+                    id: id,
+                    name: this.product.name,
+                    weight: this.product.weight,
+                    category: this.product.category,
+                    price: this.product.price,
+                    fileURL: this.product.fileURL,
+                    description: this.product.description
+                });
 
                 console.log(cartItems);
 

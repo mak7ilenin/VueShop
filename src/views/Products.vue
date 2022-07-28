@@ -26,7 +26,7 @@ import ProductItem from '@/components/ProductItem'
 
 import { db } from '@/firebase/init'
 import { collection, onSnapshot } from "firebase/firestore";
-import CartAlert from '@/components/CartAlert.vue' 
+import CartAlert from '@/components/CartAlert' 
 
 export default {
     data() {
@@ -108,14 +108,6 @@ h2 {
     letter-spacing: 2px;
     font-style: italic;
     padding-top: 35px;
-}
-.loader__container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 100px;
 }
 .items__container {
     width: 85%;

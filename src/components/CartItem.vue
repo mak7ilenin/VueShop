@@ -2,15 +2,16 @@
     <div class="cart">
         <div class="cart__decoration1"></div>
         <div class="cart__decoration2"></div>
+
         <div class="cart__name">
             <p>{{ cartItem.name }}</p>
         </div>
         <div class="cart__price">
-            <p>{{ cartItem.price }}</p>
+            <p>{{ cartItem.price }}$</p>
         </div>
         <div class="cart__btn">
             <p>Количество: </p>
-            <a>Make a purchase</a>
+            <a>To pay </a>
         </div>
         <div class="cart__image">
             <img :src="cartItem.fileURL" :alt="cartItem.name">
@@ -52,6 +53,8 @@ export default {
 .cart {
     width: 100%;
     height: 150px;
+    margin: 20px;
+    box-shadow: 0 0 10px 0 rgb(118, 255, 55);
     border-radius: 5px;
     display: flex;
     flex-wrap: nowrap;
@@ -86,7 +89,7 @@ export default {
     border-left: 730px solid transparent;
 }
 .cart__name {
-    width: 15%;
+    width: 42%;
     display: flex;
     align-items: center;
     padding-left: 70px;
@@ -95,24 +98,24 @@ export default {
 .cart__name p {
     color: #000;
     letter-spacing: 2px;
-    font-size: 32px;
+    font-size: 24px;
     font-weight: bold;
 }
 .cart__price {
-    width: 35%;
+    width: 15%;
     display: flex;
-    padding-left: 150px;
+    justify-content: center;
     align-items: center;
     z-index: 1;
 }
 .cart__price p {
     color: #000;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: bold;
     font-style: italic;
 }
 .cart__btn {
-    width: 25%;
+    width: 21%;
     height: 70%;
     display: flex;
     flex-wrap: wrap;
@@ -127,13 +130,16 @@ export default {
 }
 .cart__btn a {
     width: 80%;
+    height: 50px;
     color: rgb(255, 255, 255);
     font-weight: bold;
     font-style: italic;
-    /* padding: 10px 15px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 20%;
     padding: 15px 25px;
-    font-size: 22px;
+    font-size: 20px;
     transition: ease all .3s;
     cursor: pointer;
     background-color: #56b763;
@@ -144,7 +150,7 @@ export default {
     border-radius: 50%;
 }
 .cart__image {
-    width: 25%;
+    width: 22%;
     z-index: 1;
 }
 .cart__image img {
