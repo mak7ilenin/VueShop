@@ -12,7 +12,7 @@
             </ul>
         </div>
         <div class="header__profile">
-            <div class="user__money" v-if="authed">{{ user_money }}$</div>
+            <div class="user__money" v-if="authed">{{ authUser.money }}$</div>
             <div class="cart__container">
                 <router-link to="/my-cart" v-if="authed"><img src="../assets/shopping-cart.png" alt="cart"></router-link>
             </div>
@@ -22,7 +22,7 @@
         </div>
         <div class="profile__dropdown">
             <ul>
-                <li class="username profile__dropdown__btn">{{ user_name }}</li>
+                <li class="username profile__dropdown__btn">{{ authUser.username }}</li>
                 <router-link to="/log-in"><li class="log-in profile__dropdown__btn">Log in</li></router-link>
                 <li class="sign-out profile__dropdown__btn" @click="signOut" v-if="authed">Sign out</li>
             </ul>
@@ -35,13 +35,6 @@ import router from '@/router';
 import { auth } from '@/firebase/init';
 import { signOut } from 'firebase/auth';
 export default {
-    data() {
-        return {
-            user_name: undefined,
-            user_money: 0,
-            authed: false
-        }
-    },
     props: {
         authUser: {
             type: Object
@@ -68,11 +61,6 @@ export default {
                 alert(e.message);
             });
         }
-    },
-    created: function() {
-        this.user_name = this.authUser.username;
-        this.user_money = this.authUser.money;
-        this.authed = this.authed;
     }
 }
 </script>
