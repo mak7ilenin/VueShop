@@ -33,8 +33,7 @@ import { deleteObject, ref } from '@firebase/storage';
 export default {
     data() {
         return {
-            users: [],
-            product_name: ''
+            users: []
         }
     },
     components: {
@@ -125,26 +124,57 @@ export default {
                         this.users.push(user);
                     });
                 });
+
                 const currentArrayUser = this.users.find(user => user.userId === currentUser.uid);
                 let cartItems = currentArrayUser.cartItems;
-                cartItems.push({
-                    id: id,
-                    name: this.product.name,
-                    weight: this.product.weight,
-                    category: this.product.category,
-                    price: this.product.price,
-                    fileURL: this.product.fileURL,
-                    description: this.product.description
-                });
-
-                console.log(cartItems);
-
-                setDoc(doc(db, 'users', currentArrayUser.id), {
-                    money: currentArrayUser.money,
-                    userId: currentArrayUser.userId,
-                    username: currentArrayUser.username,
-                    cartItems: cartItems
-                });
+                
+                if(typeof cartItems !== 'undefined') {
+                    let checkSimilarCart = cartItems.find(cart => cart.id === id);
+                    if(typeof checkSimilarCart !== 'undefined') {
+                        checkSimilarCart.quantity += 1;
+                        setDoc(doc(db, 'users', currentArrayUser.id), {
+                            money: currentArrayUser.money,
+                            userId: currentArrayUser.userId,
+                            username: currentArrayUser.username,
+                            cartItems: cartItems
+                        });
+                    } else {
+                        cartItems.push({
+                            id: id,
+                            name: this.product.name,
+                            weight: this.product.weight,
+                            category: this.product.category,
+                            price: this.product.price,
+                            fileURL: this.product.fileURL,
+                            description: this.product.description,
+                            quantity: 1
+                        });
+                        setDoc(doc(db, 'users', currentArrayUser.id), {
+                            money: currentArrayUser.money,
+                            userId: currentArrayUser.userId,
+                            username: currentArrayUser.username,
+                            cartItems: cartItems
+                        });
+                    }
+                } else {
+                    cartItems = [];
+                    cartItems.push({
+                        id: id,
+                        name: this.product.name,
+                        weight: this.product.weight,
+                        category: this.product.category,
+                        price: this.product.price,
+                        fileURL: this.product.fileURL,
+                        description: this.product.description,
+                        quantity: 1
+                    });
+                    setDoc(doc(db, 'users', currentArrayUser.id), {
+                        money: currentArrayUser.money,
+                        userId: currentArrayUser.userId,
+                        username: currentArrayUser.username,
+                        cartItems: cartItems
+                    });
+                }
 
                 $('.cart_alert').show();
                 $('.cart_alert').addClass('active_alert');
