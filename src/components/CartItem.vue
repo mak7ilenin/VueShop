@@ -10,7 +10,7 @@
             <p>{{ cartItem.price }}$</p>
         </div>
         <div class="cart__btn">
-            <p>Количество: </p>
+            <p>Количество: {{ cartItem.quantity }}</p>
             <a>To pay </a>
         </div>
         <div class="cart__image">
@@ -31,25 +31,6 @@ export default {
 </script>
 
 <style>
-.cart__page {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-.cart__page h2 {
-    width: 100%;
-    margin-top: 40px;
-    font-size: 42px;
-    font-style: italic;
-    text-align: center;
-}
-.carts__container {
-    width: 75%;
-    margin: 0 auto;
-    margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-}
 .cart {
     width: 100%;
     height: 150px;
@@ -97,8 +78,8 @@ export default {
 }
 .cart__name p {
     color: #000;
-    letter-spacing: 2px;
-    font-size: 24px;
+    letter-spacing: 1px;
+    font-size: 26px;
     font-weight: bold;
 }
 .cart__price {

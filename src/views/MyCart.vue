@@ -1,7 +1,7 @@
 <template>
     <div class="cart__page">
         <h2>My shopping cart</h2>
-        <div class="loader__container">
+        <div class="loader__container" v-if="!checkCarts">
             <Loader v-if="loading"/>
         </div>
         <div class="carts__container">
@@ -28,7 +28,8 @@ export default {
             carts: [],
             users: [],
             authUser: null,
-            loading: true
+            loading: true,
+            checkCarts: false
         }
     },
     beforeMount() {
@@ -56,11 +57,31 @@ export default {
             // To fill the cart list
             this.carts = this.authUser.cartItems;
             this.loading = false;
+            this.checkCarts = true;
         }
     }
 }
 </script>
 
 <style>
-
+.cart__page {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.cart__page h2 {
+    width: 100%;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    font-size: 48px;
+    font-style: italic;
+    text-align: center;
+}
+.carts__container {
+    width: 75%;
+    margin: 0 auto;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+}
 </style>
