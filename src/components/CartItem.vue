@@ -72,8 +72,9 @@ export default {
 .cart__name {
     width: 42%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding-left: 70px;
+    /* padding-left: 70px; */
     z-index: 1;
 }
 .cart__name p {
@@ -132,6 +133,7 @@ export default {
 }
 .cart__image {
     width: 22%;
+    height: 100%;
     z-index: 1;
 }
 .cart__image img {
