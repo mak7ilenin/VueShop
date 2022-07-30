@@ -7,6 +7,7 @@
         <div class="carts__container">
             <CartList 
                 :carts="carts"
+                :authUser="authUser"
             />
         </div>
     </div>
@@ -71,8 +72,8 @@ export default {
 }
 .cart__page h2 {
     width: 100%;
-    margin-top: 60px;
-    margin-bottom: 30px;
+    margin-top: 40px;
+    margin-bottom: 10px;
     font-size: 48px;
     font-style: italic;
     text-align: center;

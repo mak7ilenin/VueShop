@@ -11,7 +11,7 @@
         </div>
         <div class="cart__btn">
             <p>Количество: {{ cartItem.quantity }}</p>
-            <a>To pay </a>
+            <a @click="buyFromCart()">To pay</a>
         </div>
         <div class="cart__image">
             <img :src="cartItem.fileURL" :alt="cartItem.name">
@@ -25,6 +25,14 @@ export default {
         cartItem: {
             type: Object,
             required: true
+        },
+        authUser: {
+            type: Object
+        }
+    },
+    methods: {
+        buyFromCart() {
+            console.log(this.authUser);
         }
     }
 }
@@ -43,7 +51,11 @@ export default {
     position: relative;
     border: 1px solid;
     background-color: rgb(255, 255, 255);
+    transition: ease all .3s;
     overflow: hidden;
+}
+.cart:hover {
+    transform: scaleY(1.04);
 }
 .cart__decoration1 {
     position: absolute;

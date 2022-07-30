@@ -30,7 +30,7 @@
         </div>
     </header>
 
-    <router-view :authUser="authUser"/>
+    <router-view/>
   </div>
 </template>
 
