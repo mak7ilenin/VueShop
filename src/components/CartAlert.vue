@@ -1,7 +1,9 @@
 <template>
-    <div id="cartAlert" class="cart_alert"><span>This product has been successfully added to cart</span></div>
+    <div id="cartAlert" class="cart_alert">
+        <span>This product has been successfully added to cart</span>
+    </div>
 </template>
-<!-- <span>were successfully added to the cart</span> -->
+
 <script>
 export default {
     props: {

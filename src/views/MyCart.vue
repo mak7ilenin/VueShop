@@ -17,8 +17,8 @@
 import { db, auth } from '@/firebase/init';
 import { collection, onSnapshot } from 'firebase/firestore';
 
-import CartList from '@/components/CartList.vue';
-import Loader from '@/components/Loader.vue';
+import CartList from '@/components/CartList';
+import Loader from '@/components/Loader';
 export default {
     components: {
         CartList,

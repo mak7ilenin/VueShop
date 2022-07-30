@@ -1,41 +1,43 @@
 <template>
-  <div class="wrapper">
-    <header>
-        <div class="header__logo">
-            <router-link to='/'>
-                <img src="@/assets/logo.png" alt="logo">
-            </router-link>
-        </div>
-        <div class="header__list">
-            <ul>
-                <li v-if="authed"><router-link to="/products">Products</router-link></li>
-                <li v-if="authed"><router-link to="/editProduct">Edit product</router-link></li>
-            </ul>
-        </div>
-        <div class="header__profile">
-            <div class="user__money" v-if="authed">{{ money }}$</div>
-            <div class="cart__container">
-                <router-link to="/my-cart" v-if="authed"><img src="@/assets/shopping-cart.png" alt="cart"></router-link>
+    <PurchaseAlert/>
+    <div class="wrapper">
+        <header>
+            <div class="header__logo">
+                <router-link to='/'>
+                    <img src="@/assets/logo.png" alt="logo">
+                </router-link>
             </div>
-            <div class="profile__img">
-                <img src="@/assets/profile.png" alt="profile" @click="openProfileDropdown">
+            <div class="header__list">
+                <ul>
+                    <li v-if="authed"><router-link to="/products">Products</router-link></li>
+                    <li v-if="authed"><router-link to="/editProduct">Edit product</router-link></li>
+                </ul>
             </div>
-        </div>
-        <div class="profile__dropdown">
-            <ul>
-                <li class="username profile__dropdown__btn">{{ username }}</li>
-                <router-link to="/log-in"><li class="log-in profile__dropdown__btn">Log in</li></router-link>
-                <li class="sign-out profile__dropdown__btn" @click="signOut" v-if="authed">Sign out</li>
-            </ul>
-        </div>
-    </header>
+            <div class="header__profile">
+                <div class="user__money" v-if="authed">{{ money }}$</div>
+                <div class="cart__container">
+                    <router-link to="/my-cart" v-if="authed"><img src="@/assets/shopping-cart.png" alt="cart"></router-link>
+                </div>
+                <div class="profile__img">
+                    <img src="@/assets/profile.png" alt="profile" @click="openProfileDropdown">
+                </div>
+            </div>
+            <div class="profile__dropdown">
+                <ul>
+                    <li class="username profile__dropdown__btn">{{ username }}</li>
+                    <router-link to="/log-in"><li class="log-in profile__dropdown__btn">Log in</li></router-link>
+                    <li class="sign-out profile__dropdown__btn" @click="signOut" v-if="authed">Sign out</li>
+                </ul>
+            </div>
+        </header>
 
-    <router-view/>
-  </div>
+        <router-view/>
+    </div>
 </template>
 
 <script>
 import router from '@/router';
+import PurchaseAlert from '@/components/PurchaseAlert';
 
 import { db, auth } from '@/firebase/init';
 import { onSnapshot, collection } from 'firebase/firestore';
@@ -44,6 +46,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 export default {
   name: 'App',
+  components: {PurchaseAlert},
   data() {
     return {
       authUser: null,
@@ -93,7 +96,11 @@ export default {
                 this.authUser = authUser;
 
                 this.username = authUser.username;
-                this.money = authUser.money;
+                let thisUserMoney = authUser.money;
+                function truncate(number, index = 2) {
+                    return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+                }
+                this.money = truncate(thisUserMoney, 2);
 
                 this.authed = true;
                 $('.log-in').removeClass('unlogged');

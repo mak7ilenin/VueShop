@@ -41,7 +41,16 @@ export default {
                     let moneyAfterPurchase = this.authUser.money -= this.cartItem.price;
                     updateDoc(doc(db, 'users', thisUserId), {
                         money: moneyAfterPurchase
-                    });
+                    }).then(() => {
+                        $('.purchase__alert').show();
+                        $('.purchase__alert').addClass('active-purchase');
+                        setTimeout(() => {
+                            $('.purchase__alert').removeClass('active-purchase');
+                            setTimeout(() => {
+                                $('.purchase__alert').hide();
+                            }, 500)
+                        }, 4500);
+                    })
                 } else {
                     return;
                 }
