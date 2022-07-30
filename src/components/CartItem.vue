@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { db } from '@/firebase/init';
+import { updateDoc, doc } from 'firebase/firestore';
 export default {
     props: {
         cartItem: {
@@ -32,7 +34,18 @@ export default {
     },
     methods: {
         buyFromCart() {
-            console.log(this.authUser);
+            if(this.authUser.money >= this.cartItem.price) {
+                const thisUserId = this.authUser.id;
+                let buyAlert = confirm('Do You really want to buy this *' + this.cartItem.name + '* ?');
+                if(buyAlert) {
+                    let moneyAfterPurchase = this.authUser.money -= this.cartItem.price;
+                    updateDoc(doc(db, 'users', thisUserId), {
+                        money: moneyAfterPurchase
+                    });
+                } else {
+                    return;
+                }
+            }
         }
     }
 }
