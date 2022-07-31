@@ -3,7 +3,6 @@
         <div class="delete__cart" @click="deleteCart()">
             <p>&times;</p>
         </div>
-
         <div class="cart__decoration1"></div>
         <div class="cart__decoration2"></div>
 
@@ -61,7 +60,12 @@ export default {
             }
         },
         deleteCart() {
-            console.log(this.authUser.id);
+            const thisCartIndex = this.authUser.cartItems.findIndex(cart => cart.id == this.cartItem.id);
+            this.authUser.cartItems.splice(thisCartIndex, 1);
+            
+            updateDoc(doc(db, 'users', this.authUser.id), {
+                cartItems: this.authUser.cartItems
+            });
         }
     },
     created: async function() {
