@@ -1,5 +1,9 @@
 <template>
     <div class="cart">
+        <div class="delete__cart" @click="deleteCart()">
+            <p>&times;</p>
+        </div>
+
         <div class="cart__decoration1"></div>
         <div class="cart__decoration2"></div>
 
@@ -55,7 +59,18 @@ export default {
                     return;
                 }
             }
+        },
+        deleteCart() {
+            console.log(this.authUser.id);
         }
+    },
+    created: async function() {
+        $('.delete__cart').on('mouseover', function() {
+            $(this).parent().css({boxShadow: '0 0 20px 0 rgb(255, 55, 55)', borderColor: 'rgb(255, 0, 0)'});
+        });
+        $('.delete__cart').on('mouseout', function() {
+            $(this).parent().removeAttr('style');
+        });
     }
 }
 </script>
@@ -77,7 +92,25 @@ export default {
     overflow: hidden;
 }
 .cart:hover {
-    transform: scaleY(1.04);
+    /* transform: scaleY(1.04); */
+    box-shadow: 0 0 20px 0 rgb(118, 255, 55);
+}
+.delete__cart {
+    width: 50px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+    background-color: rgb(255, 0, 0);
+    box-shadow: 0 0 5px 0 #000;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    cursor: pointer;
 }
 .cart__decoration1 {
     position: absolute;

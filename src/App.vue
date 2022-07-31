@@ -249,6 +249,9 @@ header {
     margin: 0 !important;
     padding: 0 !important;
 }
+.username {
+    cursor: default !important;
+}
 .profile__dropdown ul {
     margin: 0;
 }
