@@ -68,11 +68,11 @@ export default {
             });
         }
     },
-    created: async function() {
-        $('.delete__cart').on('mouseover', function() {
+    created: async function() {   
+        $('.delete__cart').mouseover(function() {
             $(this).parent().css({boxShadow: '0 0 20px 0 rgb(255, 55, 55)', borderColor: 'rgb(255, 0, 0)'});
         });
-        $('.delete__cart').on('mouseout', function() {
+        $('.delete__cart').mouseout(function() {
             $(this).parent().removeAttr('style');
         });
     }

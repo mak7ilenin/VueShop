@@ -110,6 +110,7 @@ export default {
                 this.description = '';
                 this.fileName = 'Choose file';
             }
+            this.closeForm();
         },
         selectFile(event) {
             this.fileName = event.target.files[0].name;
