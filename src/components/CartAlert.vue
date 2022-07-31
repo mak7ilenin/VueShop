@@ -22,7 +22,7 @@ export default {
     width: 100%;
     height: 85px;
     opacity: 0;
-    background-color: rgba(199, 199, 199, 0.637);
+    background-color: rgba(199, 199, 199, 0.837);
 
     display: flex;
     align-items: center;
@@ -39,13 +39,15 @@ export default {
     /* transition-timing-function: cubic-bezier(0.46,-0.71, 0.35, 1.71); */
 }
 .cart_alert span {
+    font-family: 'Albert Sans', sans-serif;
     font-style: italic;
     padding-left: 8px;
     color: #000000;
-    font-weight: 300;
+    font-size: 28px;
+    font-weight: 600;
 }
 .active_alert {
-    opacity: 0.98;
+    opacity: 1;
     transform: translateY(0%);
 }
 </style>

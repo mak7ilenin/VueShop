@@ -99,6 +99,15 @@ export default {
                             
                             updateDoc(doc(db, 'users', currentArrayUser.id), {
                                 money: userMoney
+                            }).then(() => {
+                                $('.purchase__alert').show();
+                                $('.purchase__alert').addClass('active-purchase');
+                                setTimeout(() => {
+                                    $('.purchase__alert').removeClass('active-purchase');
+                                    setTimeout(() => {
+                                        $('.purchase__alert').hide();
+                                    }, 500)
+                                }, 4500);
                             });
                         } catch(e) {
                             alert('Something went wrong ...');

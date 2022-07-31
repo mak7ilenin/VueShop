@@ -63,7 +63,7 @@ export default {
 <style>
 .cart {
     width: 100%;
-    height: 150px;
+    height: 115px;
     margin: 20px;
     box-shadow: 0 0 10px 0 rgb(118, 255, 55);
     border-radius: 5px;
@@ -140,13 +140,14 @@ export default {
 }
 .cart__btn p {
     width: 80%;
+    margin-bottom: 3px;
     color: #000;
     font-size: 20px;
     font-weight: bold;
 }
 .cart__btn a {
     width: 80%;
-    height: 50px;
+    height: 45px;
     color: rgb(255, 255, 255);
     font-weight: bold;
     font-style: italic;
