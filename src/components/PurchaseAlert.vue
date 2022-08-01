@@ -21,7 +21,7 @@
     border-radius: 2px;
 
     transform: translateY(-100%);
-    z-index: 99;
+    z-index: 10;
     opacity: 0;
     transition: ease all .5s;
     /* transition-timing-function: cubic-bezier(.46,-0.71,.47,.79); */

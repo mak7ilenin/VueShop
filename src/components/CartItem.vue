@@ -2,8 +2,8 @@
     <div class="choose__alert">
         <p>Choose the buy method:</p>
         <div class="methods__container">
-            <a @click="buyMultipleProductsBtn()">Buy {{ cartItem.quantity }} pieces</a>
-            <a @click="buyOneProductBtn()">Buy one piece({{ thisCartPrice }}$)</a>
+            <a @click="buyMultipleProductsBtn()">Buy {{ cartItem.quantity }} pieces ({{ cartItem.price * cartItem.quantity }})$</a>
+            <a @click="buyOneProductBtn()">Buy one piece ({{ cartItem.price }}$)</a>
         </div>
     </div>
     <div class="cart">
@@ -39,9 +39,6 @@ export default {
     data() {
         return {
             multipleProduct: null,
-            thisCartPrice: null,
-            thisCartMultiplePrice: null,
-
             buyOne: false,
             buyMany: false
         }
@@ -67,23 +64,36 @@ export default {
         buyFromCart() {
             if(this.authUser.money >= this.cartItem.price) {
                 $('.choose__alert').addClass('show-choose-alert');
+                $('.non-active-screen').css('display', 'unset');
+
                 if(this.buyOne) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
                     updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser);
+                    this.buyOne = false;
                 } else if(this.buyMany) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
                     updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser);
+                    this.buyMany = false;
                 } else {
                     return;
                 }
                 function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser) {
                     if(buyAlert == true && moneyAfterPurchase !== thisUser.money) {
                         const thisUserId = thisUser.id;
+
+                        // Function to convert the number
+                        function truncate(number, index = 2) {
+                            return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+                        }
+                        const userMoney = truncate(moneyAfterPurchase, 2);
                         updateDoc(doc(db, 'users', thisUserId), {
-                            money: moneyAfterPurchase
+                            money: userMoney
                         }).then(() => {
+                            $('.choose__alert').removeClass('show-choose-alert');
+                            $('.non-active-screen').removeAttr('style');
+
                             $('.purchase__alert').show();
                             $('.purchase__alert').addClass('active-purchase');
                             setTimeout(() => {
@@ -94,6 +104,8 @@ export default {
                             }, 4500);
                         })
                     } else {
+                        $('.choose__alert').removeClass('show-choose-alert');
+                        $('.non-active-screen').removeAttr('style');
                         return;
                     }
                 }
@@ -139,13 +151,13 @@ export default {
 
     background-color: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 999px 0 #000;
+    /* box-shadow: 0 0 999px 0 #000; */
 
     position: fixed;
     left: calc((50vw - 50%) * -1);
     top: calc((50vh - 50%) * -1);
     transform: translate(calc(50vw - 50%), calc(50vh - 50%));
-    z-index: 10;
+    z-index: 25;
 }
 .show-choose-alert {
     display: flex;

@@ -1,5 +1,6 @@
 <template>
     <PurchaseAlert/>
+    <div class="non-active-screen"></div>
     <div class="wrapper">
         <header>
             <div class="header__logo">
@@ -139,6 +140,17 @@ body {
   color: #fff;
   margin-top: 60px;
 }
+.non-active-screen {
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, 0.616);
+}
 .wrapper {
   width: 80%;
   margin: 0 auto;
@@ -150,7 +162,7 @@ header {
     background-color: #89e4b9;
     width: 100%;
     height: 100px;
-    z-index: 999;
+    z-index: 15;
     display: flex;
     position: fixed;
     top: 0;
