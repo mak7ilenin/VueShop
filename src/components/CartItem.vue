@@ -11,6 +11,7 @@
         </div>
         <div class="cart__price">
             <p>{{ cartItem.price }}$</p>
+            <p class="cart__final__sum">Final sum: {{ multipleProduct }}$</p>
         </div>
         <div class="cart__btn">
             <p>Количество: {{ cartItem.quantity }}</p>
@@ -26,6 +27,11 @@
 import { db } from '@/firebase/init';
 import { updateDoc, doc } from 'firebase/firestore';
 export default {
+    data() {
+        return {
+            multipleProduct: null
+        }
+    },
     props: {
         cartItem: {
             type: Object,
@@ -75,6 +81,11 @@ export default {
         $('.delete__cart').mouseout(function() {
             $(this).parent().removeAttr('style');
         });
+    },
+    beforeMount() {
+        if(this.cartItem.quantity > 1) {
+            this.multipleProduct = (this.cartItem.price * this.cartItem.quantity);
+        }
     }
 }
 </script>
@@ -159,6 +170,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     z-index: 1;
 }
 .cart__price p {
@@ -166,6 +178,9 @@ export default {
     font-size: 24px;
     font-weight: bold;
     font-style: italic;
+}
+.cart__final__sum {
+    font-size: 16px !important;
 }
 .cart__btn {
     width: 21%;
