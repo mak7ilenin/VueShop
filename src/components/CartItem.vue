@@ -35,7 +35,7 @@
 
 <script>
 import { db } from '@/firebase/init';
-import { updateDoc, doc } from 'firebase/firestore';
+import { updateDoc, deleteField, doc } from 'firebase/firestore';
 export default {
     data() {
         return {
@@ -66,6 +66,7 @@ export default {
             this.buyFromCart();
         },
         buyFromCart() {
+            const thisCartId = this.cartItem.id;
             if(this.authUser.money >= this.cartItem.price) {
                 $('.choose__alert').addClass('show-choose-alert');
                 $('.non-active-screen').css('display', 'unset');
@@ -73,17 +74,17 @@ export default {
                 if(this.buyOne) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
-                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser);
+                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyOne, this.buyMany)
                     this.buyOne = false;
                 } else if(this.buyMany) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
-                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser);
+                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyOne, this.buyMany);
                     this.buyMany = false;
                 } else {
                     return;
                 }
-                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser) {
+                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser, buyMany, buyOne) {
                     if(buyAlert == true && moneyAfterPurchase !== thisUser.money) {
                         const thisUserId = thisUser.id;
 
@@ -92,21 +93,27 @@ export default {
                             return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
                         }
                         const userMoney = truncate(moneyAfterPurchase, 2);
+                        if(buyOne) {
+                            const thisCart = thisUser.cartItems.find(cart => cart.id = thisCartId);
+                            thisCart.quantity - 1;
+                        } else if(buyMany) {
+                            
+                        }
                         updateDoc(doc(db, 'users', thisUserId), {
-                            money: userMoney
-                        }).then(() => {
-                            $('.choose__alert').removeClass('show-choose-alert');
-                            $('.non-active-screen').removeAttr('style');
+                            money: userMoney,
+                            cartItems: thisUser.cartItems
+                        });
+                        $('.choose__alert').removeClass('show-choose-alert');
+                        $('.non-active-screen').removeAttr('style');
 
-                            $('.purchase__alert').show();
-                            $('.purchase__alert').addClass('active-purchase');
+                        $('.purchase__alert').show();
+                        $('.purchase__alert').addClass('active-purchase');
+                        setTimeout(() => {
+                            $('.purchase__alert').removeClass('active-purchase');
                             setTimeout(() => {
-                                $('.purchase__alert').removeClass('active-purchase');
-                                setTimeout(() => {
-                                    $('.purchase__alert').hide();
-                                }, 500)
-                            }, 4500);
-                        })
+                                $('.purchase__alert').hide();
+                            }, 500)
+                        }, 4500);
                     } else {
                         $('.choose__alert').removeClass('show-choose-alert');
                         $('.non-active-screen').removeAttr('style');

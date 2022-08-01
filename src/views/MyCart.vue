@@ -60,7 +60,7 @@ export default {
             this.carts = this.authUser.cartItems;
             this.loading = false;
             $('.loader__container').hide();
-            if(this.carts.length > 0) {
+            if(this.carts.length > 0 || this.carts !== null) {
                 this.checkCarts = true;
             } else {
                 this.checkCarts = false;
