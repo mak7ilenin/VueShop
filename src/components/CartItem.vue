@@ -1,8 +1,9 @@
 <template>
     <div class="choose__alert">
+        <div class="close__choose__alert" @click="closeChooseAlert()">&times;</div>
         <p>Choose the buy method:</p>
         <div class="methods__container">
-            <a @click="buyMultipleProductsBtn()">Buy {{ cartItem.quantity }} pieces ({{ cartItem.price * cartItem.quantity }})$</a>
+            <a @click="buyMultipleProductsBtn()">Buy {{ cartItem.quantity }} pieces ({{ truncate((cartItem.price * cartItem.quantity), 2) }})$</a>
             <a @click="buyOneProductBtn()">Buy one piece ({{ cartItem.price }}$)</a>
         </div>
     </div>
@@ -53,6 +54,9 @@ export default {
         }
     },
     methods: {
+        truncate(number, index = 2) {
+            return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+        },
         buyMultipleProductsBtn() {
             this.buyMany = true;
             this.buyFromCart();
@@ -120,6 +124,10 @@ export default {
             updateDoc(doc(db, 'users', this.authUser.id), {
                 cartItems: this.authUser.cartItems
             });
+        },
+        closeChooseAlert() {
+            $('.choose__alert').removeClass('show-choose-alert');
+            $('.non-active-screen').removeAttr('style');
         }
     },
     created: async function() {   
@@ -132,7 +140,7 @@ export default {
     },
     beforeMount() {
         if(this.cartItem.quantity > 1) {
-            this.multipleProduct = (this.cartItem.price * this.cartItem.quantity);
+            this.multipleProduct = this.truncate((this.cartItem.price * this.cartItem.quantity), 2);
         }
     }
 }
@@ -158,6 +166,22 @@ export default {
     top: calc((50vh - 50%) * -1);
     transform: translate(calc(50vw - 50%), calc(50vh - 50%));
     z-index: 25;
+}
+.close__choose__alert {
+    width: 35px; 
+    height: 35px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgb(255, 118, 118);
+    font-size: 30px;
+    cursor: pointer;
 }
 .show-choose-alert {
     display: flex;
@@ -267,6 +291,7 @@ export default {
 }
 .cart__price {
     width: 15%;
+    margin: 0 10px;
     display: flex;
     justify-content: center;
     align-items: center;

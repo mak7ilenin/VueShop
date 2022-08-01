@@ -33,7 +33,7 @@ export default {
     font-weight: 900;
 
     transform: translateY(-70%);
-    z-index: 99;
+    z-index: 10;
     transition: ease all 0.5s;
     transition-timing-function: cubic-bezier(.46,-0.71,.47,.79);
     /* transition-timing-function: cubic-bezier(0.46,-0.71, 0.35, 1.71); */
