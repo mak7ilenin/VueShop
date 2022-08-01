@@ -96,11 +96,12 @@ export default {
                 this.authUser = authUser;
 
                 this.username = authUser.username;
-                let thisUserMoney = authUser.money;
-                function truncate(number, index = 2) {
-                    return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
-                }
-                this.money = truncate(thisUserMoney, 2);
+                this.money = authUser.money;
+                // let thisUserMoney = authUser.money;
+                // function truncate(number, index = 2) {
+                //     return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
+                // }
+                // this.money = truncate(thisUserMoney, 2);
 
                 this.authed = true;
                 $('.log-in').removeClass('unlogged');

@@ -1,4 +1,11 @@
 <template>
+    <div class="choose__alert">
+        <p>Choose the buy method:</p>
+        <div class="methods__container">
+            <a @click="buyMultipleProductsBtn()">Buy {{ cartItem.quantity }} pieces</a>
+            <a @click="buyOneProductBtn()">Buy one piece({{ thisCartPrice }}$)</a>
+        </div>
+    </div>
     <div class="cart">
         <div class="delete__cart" @click="deleteCart()">
             <p>&times;</p>
@@ -10,7 +17,9 @@
             <p>{{ cartItem.name }}</p>
         </div>
         <div class="cart__price">
-            <p>{{ cartItem.price }}$</p>
+            <div>
+                <p>{{ cartItem.price }}$</p>
+            </div>
             <p class="cart__final__sum">Final sum: {{ multipleProduct }}$</p>
         </div>
         <div class="cart__btn">
@@ -29,7 +38,12 @@ import { updateDoc, doc } from 'firebase/firestore';
 export default {
     data() {
         return {
-            multipleProduct: null
+            multipleProduct: null,
+            thisCartPrice: null,
+            thisCartMultiplePrice: null,
+
+            buyOne: false,
+            buyMany: false
         }
     },
     props: {
@@ -42,27 +56,49 @@ export default {
         }
     },
     methods: {
+        buyMultipleProductsBtn() {
+            this.buyMany = true;
+            this.buyFromCart();
+        },
+        buyOneProductBtn() {
+            this.buyOne = true;
+            this.buyFromCart();
+        },
         buyFromCart() {
             if(this.authUser.money >= this.cartItem.price) {
-                const thisUserId = this.authUser.id;
-                let buyAlert = confirm('Do You really want to buy this *' + this.cartItem.name + '* ?');
-                if(buyAlert) {
-                    let moneyAfterPurchase = this.authUser.money -= this.cartItem.price;
-                    updateDoc(doc(db, 'users', thisUserId), {
-                        money: moneyAfterPurchase
-                    }).then(() => {
-                        $('.purchase__alert').show();
-                        $('.purchase__alert').addClass('active-purchase');
-                        setTimeout(() => {
-                            $('.purchase__alert').removeClass('active-purchase');
-                            setTimeout(() => {
-                                $('.purchase__alert').hide();
-                            }, 500)
-                        }, 4500);
-                    })
+                $('.choose__alert').addClass('show-choose-alert');
+                if(this.buyOne) {
+                    var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '* ?');
+                    var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
+                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser);
+                } else if(this.buyMany) {
+                    var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
+                    var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
+                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser);
                 } else {
                     return;
                 }
+                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser) {
+                    if(buyAlert == true && moneyAfterPurchase !== thisUser.money) {
+                        const thisUserId = thisUser.id;
+                        updateDoc(doc(db, 'users', thisUserId), {
+                            money: moneyAfterPurchase
+                        }).then(() => {
+                            $('.purchase__alert').show();
+                            $('.purchase__alert').addClass('active-purchase');
+                            setTimeout(() => {
+                                $('.purchase__alert').removeClass('active-purchase');
+                                setTimeout(() => {
+                                    $('.purchase__alert').hide();
+                                }, 500)
+                            }, 4500);
+                        })
+                    } else {
+                        return;
+                    }
+                }
+            } else {
+                alert('Not enough money!');
             }
         },
         deleteCart() {
@@ -91,6 +127,58 @@ export default {
 </script>
 
 <style>
+.choose__alert {
+    width: 550px;
+    height: 200px;
+    padding: 10px;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 999px 0 #000;
+
+    position: fixed;
+    left: calc((50vw - 50%) * -1);
+    top: calc((50vh - 50%) * -1);
+    transform: translate(calc(50vw - 50%), calc(50vh - 50%));
+    z-index: 10;
+}
+.show-choose-alert {
+    display: flex;
+}
+.choose__alert p {
+    width: 100%;
+    color: #000;
+    font-size: 30px;
+}
+.methods__container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+.methods__container a {
+    width: 35%;
+    text-align: center;
+    padding: 12px 10px;
+    border-radius: 5px;
+    color: #000 !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+.methods__container a:nth-child(1) {
+    background-color: #4ed4fd;
+}
+.methods__container a:nth-child(2) {
+    background-color: #55ff7f;
+}
+
+
 .cart {
     width: 100%;
     height: 115px;
@@ -172,6 +260,9 @@ export default {
     align-items: center;
     flex-wrap: wrap;
     z-index: 1;
+}
+.cart__price div {
+    width: 100%;
 }
 .cart__price p {
     color: #000;
