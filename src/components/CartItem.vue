@@ -35,14 +35,13 @@
 
 <script>
 import { db } from '@/firebase/init';
-import { updateDoc, deleteField, doc } from 'firebase/firestore';
+import { updateDoc, doc } from 'firebase/firestore';
 export default {
     data() {
         return {
             multipleProduct: null,
             buyOne: false,
-            buyMany: false,
-            nocart: false
+            buyMany: false
         }
     },
     props: {
@@ -61,10 +60,12 @@ export default {
         buyMultipleProductsBtn() {
             this.buyMany = true;
             this.buyFromCart();
+            this.buyMany = false;
         },
         buyOneProductBtn() {
             this.buyOne = true;
             this.buyFromCart();
+            this.buyOne = false;
         },
         buyFromCart() {
             if(this.authUser.money >= this.cartItem.price) {
@@ -74,16 +75,15 @@ export default {
                 if(this.buyOne) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
-                    this.buyOne = true;
                 }
-                if(this.buyMany) {
+                else if(this.buyMany) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
-                    this.buyMany = true;
                 } else {
                     return;
                 }
-                updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyOne, this.buyMany, this.cartItem);
+
+                updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyMany, this.buyOne, this.cartItem);
                 function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser, buyMany, buyOne, thisCart) {
                     if(buyAlert == true && moneyAfterPurchase !== thisUser.money) {
                         const thisUserId = thisUser.id;
@@ -94,20 +94,21 @@ export default {
                         }
                         const userMoney = truncate(moneyAfterPurchase, 2);
 
-                        console.log(thisCart.quantity);
+                        // Change quantity
                         if(buyOne) {
-                            thisCart.quantity - 1;
+                            thisCart.quantity -= 1;
                         }
-                        buyMany === true ? thisCart.quantity = 0 : thisCart.quantity;
-                        // if(buyMany) {
-                        //     thisCart.quantity = 0;
-                        // }
+                        if(buyMany) {
+                            thisCart.quantity = 0;
+                        }
+
+                        // Delete cart from list if quantity is zero
                         if(thisCart.quantity === 0) {
                             let thisCartIndex = thisUser.cartItems.indexOf(cart => cart.id === thisCart.id);
                             thisUser.cartItems.splice(thisCartIndex, 1);
                         }
-                        console.log('after', thisCart.quantity);
                         
+                        // Edit database data
                         updateDoc(doc(db, 'users', thisUserId), {
                             money: userMoney,
                             cartItems: thisUser.cartItems
@@ -129,9 +130,6 @@ export default {
                         $('.non-active-screen').removeAttr('style');
                         return;
                     }
-                }
-                if(this.cartItem.quantity === 0) {
-                    this.nocart = true;
                 }
             } else {
                 alert('Not enough money!');

@@ -5,7 +5,7 @@
             <Loader v-if="loading"/>
         </div>
         <div class="carts__container">
-            <p class="empty-cart" v-if="!checkCarts">There are no products in your cart yet . . .</p>
+            <p class="empty-cart" v-if="checkCarts">There are no products in your cart yet . . .</p>
             <CartList 
                 :carts="carts"
                 :authUser="authUser"
@@ -31,7 +31,7 @@ export default {
             users: [],
             authUser: null,
             loading: true,
-            checkCarts: true
+            checkCarts: false
         }
     },
     beforeMount() {
@@ -60,10 +60,10 @@ export default {
             this.carts = this.authUser.cartItems;
             this.loading = false;
             $('.loader__container').hide();
-            if(this.carts.length > 0 || this.carts !== null) {
-                this.checkCarts = true;
-            } else {
+            if(this.carts.length > 0) {
                 this.checkCarts = false;
+            } else {
+                this.checkCarts = true;
             }
         }
     }
