@@ -21,7 +21,7 @@
             <div>
                 <p>{{ cartItem.price }}$</p>
             </div>
-            <p class="cart__final__sum">Final sum: {{ multipleProduct }}$</p>
+            <p class="cart__final__sum" v-if="multipleProduct !== null">Final sum: {{ multipleProduct }}$</p>
         </div>
         <div class="cart__btn">
             <p>Количество: {{ cartItem.quantity }}</p>
@@ -41,7 +41,8 @@ export default {
         return {
             multipleProduct: null,
             buyOne: false,
-            buyMany: false
+            buyMany: false,
+            nocart: false
         }
     },
     props: {
@@ -66,7 +67,6 @@ export default {
             this.buyFromCart();
         },
         buyFromCart() {
-            const thisCartId = this.cartItem.id;
             if(this.authUser.money >= this.cartItem.price) {
                 $('.choose__alert').addClass('show-choose-alert');
                 $('.non-active-screen').css('display', 'unset');
@@ -74,17 +74,17 @@ export default {
                 if(this.buyOne) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
-                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyOne, this.buyMany)
-                    this.buyOne = false;
-                } else if(this.buyMany) {
+                    this.buyOne = true;
+                }
+                if(this.buyMany) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
-                    updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyOne, this.buyMany);
-                    this.buyMany = false;
+                    this.buyMany = true;
                 } else {
                     return;
                 }
-                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser, buyMany, buyOne) {
+                updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyOne, this.buyMany, this.cartItem);
+                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser, buyMany, buyOne, thisCart) {
                     if(buyAlert == true && moneyAfterPurchase !== thisUser.money) {
                         const thisUserId = thisUser.id;
 
@@ -93,32 +93,45 @@ export default {
                             return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
                         }
                         const userMoney = truncate(moneyAfterPurchase, 2);
+
+                        console.log(thisCart.quantity);
                         if(buyOne) {
-                            const thisCart = thisUser.cartItems.find(cart => cart.id = thisCartId);
                             thisCart.quantity - 1;
-                        } else if(buyMany) {
-                            
                         }
+                        buyMany === true ? thisCart.quantity = 0 : thisCart.quantity;
+                        // if(buyMany) {
+                        //     thisCart.quantity = 0;
+                        // }
+                        if(thisCart.quantity === 0) {
+                            let thisCartIndex = thisUser.cartItems.indexOf(cart => cart.id === thisCart.id);
+                            thisUser.cartItems.splice(thisCartIndex, 1);
+                        }
+                        console.log('after', thisCart.quantity);
+                        
                         updateDoc(doc(db, 'users', thisUserId), {
                             money: userMoney,
                             cartItems: thisUser.cartItems
-                        });
-                        $('.choose__alert').removeClass('show-choose-alert');
-                        $('.non-active-screen').removeAttr('style');
-
-                        $('.purchase__alert').show();
-                        $('.purchase__alert').addClass('active-purchase');
-                        setTimeout(() => {
-                            $('.purchase__alert').removeClass('active-purchase');
+                        }).then(() => {
+                            $('.choose__alert').removeClass('show-choose-alert');
+                            $('.non-active-screen').removeAttr('style');
+    
+                            $('.purchase__alert').show();
+                            $('.purchase__alert').addClass('active-purchase');
                             setTimeout(() => {
-                                $('.purchase__alert').hide();
-                            }, 500)
-                        }, 4500);
+                                $('.purchase__alert').removeClass('active-purchase');
+                                setTimeout(() => {
+                                    $('.purchase__alert').hide();
+                                }, 500)
+                            }, 4500);
+                        })
                     } else {
                         $('.choose__alert').removeClass('show-choose-alert');
                         $('.non-active-screen').removeAttr('style');
                         return;
                     }
+                }
+                if(this.cartItem.quantity === 0) {
+                    this.nocart = true;
                 }
             } else {
                 alert('Not enough money!');
