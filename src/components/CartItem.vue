@@ -76,9 +76,9 @@ export default {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '* ?');
                     var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
                 }
-                else if(this.buyMany) {
+                if(this.buyMany) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
-                    var moneyAfterPurchase = this.authUser.money - this.cartItem.price;
+                    var moneyAfterPurchase = this.authUser.money - (this.cartItem.price * this.cartItem.quantity);
                 } else {
                     return;
                 }
