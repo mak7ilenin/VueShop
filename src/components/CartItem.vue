@@ -1,10 +1,10 @@
 <template>
-    <div class="choose__alert">
+    <div class="choose__alert" v-if="methodWindow">
         <div class="close__choose__alert" @click="closeChooseAlert()">&times;</div>
         <p>Choose the buy method:</p>
         <div class="methods__container">
-            <a @click="buyMultipleProductsBtn()">Buy {{ cartItem.quantity }} pieces ({{ truncate((cartItem.price * cartItem.quantity), 2) }})$</a>
-            <a @click="buyOneProductBtn()">Buy one piece ({{ cartItem.price }}$)</a>
+            <a @click="buyMultipleProductsBtn()">Buy {{ thisCart.quantity }} pieces <span>({{ truncate((thisCart.price * thisCart.quantity), 2) }})$</span></a>
+            <a @click="buyOneProductBtn()">Buy one piece <span>({{ thisCart.price }}$)</span></a>
         </div>
     </div>
     <div class="cart">
@@ -40,6 +40,8 @@ export default {
     data() {
         return {
             multipleProduct: null,
+            methodWindow: false,
+            thisCart: null,
             buyOne: false,
             buyMany: false
         }
@@ -68,8 +70,10 @@ export default {
             this.buyOne = false;
         },
         buyFromCart() {
+            this.thisCart = this.cartItem;
+
             if(this.authUser.money >= this.cartItem.price) {
-                $('.choose__alert').addClass('show-choose-alert');
+                this.methodWindow = true;
                 $('.non-active-screen').css('display', 'unset');
 
                 if(this.buyOne) {
@@ -83,8 +87,8 @@ export default {
                     return;
                 }
 
-                updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyMany, this.buyOne, this.cartItem);
-                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser, buyMany, buyOne, thisCart) {
+                updateUserMoney(buyAlert, moneyAfterPurchase, this.authUser, this.buyMany, this.buyOne, this.cartItem, this.methodWindow);
+                function updateUserMoney(buyAlert, moneyAfterPurchase, thisUser, buyMany, buyOne, thisCart, methodWindow) {
                     if(buyAlert == true && moneyAfterPurchase !== thisUser.money) {
                         const thisUserId = thisUser.id;
 
@@ -100,6 +104,7 @@ export default {
                         }
                         if(buyMany) {
                             thisCart.quantity = 0;
+                            methodWindow = false;
                         }
 
                         // Delete cart from list if quantity is zero
@@ -113,7 +118,7 @@ export default {
                             money: userMoney,
                             cartItems: thisUser.cartItems
                         }).then(() => {
-                            $('.choose__alert').removeClass('show-choose-alert');
+                            methodWindow = false;
                             $('.non-active-screen').removeAttr('style');
     
                             $('.purchase__alert').show();
@@ -126,7 +131,7 @@ export default {
                             }, 4500);
                         })
                     } else {
-                        $('.choose__alert').removeClass('show-choose-alert');
+                        methodWindow = false;
                         $('.non-active-screen').removeAttr('style');
                         return;
                     }
@@ -144,8 +149,8 @@ export default {
             });
         },
         closeChooseAlert() {
-            $('.choose__alert').removeClass('show-choose-alert');
             $('.non-active-screen').removeAttr('style');
+            this.methodWindow = false;
         }
     },
     created: async function() {   
@@ -170,7 +175,7 @@ export default {
     height: 200px;
     padding: 10px;
 
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
@@ -201,9 +206,6 @@ export default {
     font-size: 30px;
     cursor: pointer;
 }
-.show-choose-alert {
-    display: flex;
-}
 .choose__alert p {
     width: 100%;
     color: #000;
@@ -218,18 +220,34 @@ export default {
 }
 .methods__container a {
     width: 35%;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
     text-align: center;
-    padding: 12px 10px;
-    border-radius: 5px;
     color: #000 !important;
     font-weight: bold;
+
+    padding: 12px 10px;
+    border-radius: 5px;
+
     cursor: pointer;
+    transition: ease all .3s;
 }
 .methods__container a:nth-child(1) {
     background-color: #4ed4fd;
 }
 .methods__container a:nth-child(2) {
     background-color: #55ff7f;
+}
+.methods__container a span {
+    width: 100%;
+}
+.methods__container a:hover {
+    transform: scaleX(1.02)
 }
 
 
