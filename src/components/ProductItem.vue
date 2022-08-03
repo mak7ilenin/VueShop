@@ -120,25 +120,13 @@ export default {
                 }
         },
         addToCart() {
-            let id = this.product.id;
             if(!$('.cart_alert').hasClass('active_alert')) {
                 const currentUser = auth.currentUser;
-                onSnapshot(collection(db, 'users'), (querySnapshot) => {
-                    this.users = [];
-                    querySnapshot.forEach((doc) => {
-                        const user = {
-                            id: doc.id,
-                            cartItems: doc.data().cartItems
-                        }
-                        this.users.push(user);
-                    });
-                });
-
                 const currentArrayUser = this.users.find(user => user.userId === currentUser.uid);
+
                 let cartItems = currentArrayUser.cartItems;
-                
                 if(typeof cartItems !== 'undefined') {
-                    let checkSimilarCart = cartItems.find(cart => cart.id === id);
+                    let checkSimilarCart = cartItems.find(cart => cart.id === this.product.id);
                     if(typeof checkSimilarCart !== 'undefined') {
                         checkSimilarCart.quantity += 1;
                         setDoc(doc(db, 'users', currentArrayUser.id), {
@@ -149,7 +137,7 @@ export default {
                         });
                     } else {
                         cartItems.push({
-                            id: id,
+                            id: this.product.id,
                             name: this.product.name,
                             weight: this.product.weight,
                             category: this.product.category,
@@ -168,7 +156,7 @@ export default {
                 } else {
                     cartItems = [];
                     cartItems.push({
-                        id: id,
+                        id: this.product.id,
                         name: this.product.name,
                         weight: this.product.weight,
                         category: this.product.category,
