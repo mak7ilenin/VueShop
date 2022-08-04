@@ -83,7 +83,8 @@ export default {
                 if(this.buyMany) {
                     var buyAlert = confirm('Are you sure you want to buy this *' + this.cartItem.name + '(' + this.cartItem.quantity + ' pieces)' + '* ?');
                     var moneyAfterPurchase = this.authUser.money - (this.cartItem.price * this.cartItem.quantity);
-                } else {
+                }
+                if(!this.buyOne && !this.buyMany) {
                     return;
                 }
 
@@ -164,6 +165,13 @@ export default {
     beforeMount() {
         if(this.cartItem.quantity > 1) {
             this.multipleProduct = this.truncate((this.cartItem.price * this.cartItem.quantity), 2);
+        } 
+        if(this.cartItem.quantity === 0) {
+            let thisCartIndex = this.authUser.cartItems.indexOf(cart => cart.id === thisCart.id);
+            this.authUser.cartItems.splice(thisCartIndex, 1);
+            updateDoc(doc(db, 'users', this.authUser.id), {
+                cartItems: this.authUser.cartItems
+            });
         }
     }
 }
