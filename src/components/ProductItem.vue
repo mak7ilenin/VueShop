@@ -1,4 +1,5 @@
 <template>
+    <NoMoneyAlert />
     <div class="item" :id="product.id">
         <div class="item__delete__btn" @click="deleteProduct()">&times;</div>
         <div class="item__img">
@@ -24,7 +25,8 @@
 </template>
 
 <script>
-import CartAlert from '@/components/CartAlert'
+import CartAlert from '@/components/CartAlert';
+import NoMoneyAlert from '@/components/NoMoneyAlert';
 
 import { db, auth, productsStorageRef } from '@/firebase/init';
 import { updateDoc, deleteDoc, collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
@@ -37,7 +39,8 @@ export default {
         }
     },
     components: {
-        CartAlert
+        CartAlert,
+        NoMoneyAlert
     },
     props: {
         product: {
