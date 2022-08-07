@@ -138,7 +138,14 @@ export default {
                     }
                 }
             } else {
-                alert('Not enough money!');
+                $('.no-money-alert').css('display', 'flex');
+                $('.no-money-alert').addClass('active-no-money-alert');
+                setTimeout(() => {
+                    $('.no-money-alert').removeClass('active-no-money-alert');
+                    setTimeout(() => {
+                        $('.no-money-alert').removeAttr('style');
+                    }, 500)
+                }, 4500);
             }
         },
         deleteCart() {

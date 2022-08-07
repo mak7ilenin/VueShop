@@ -1,29 +1,39 @@
 <template>
     <div class="no-money-alert">
-        <p>Not enough money to buy this product!</p>
+        <p>You do not have enough funds to purchase this item!</p>
     </div>
 </template>
 
 <style>
 .no-money-alert {
-    width: 450px;
-    height: 200px;
-
-    position: fixed;
-    left: calc((50vw - 50%) * -1);
-    top: calc((50vh - 50%) * -1);
-    transform: translate(calc(50vw - 50%), calc(50vh - 50%));
-    z-index: 25;
-
-    background-color: #fff;
-    border-radius: 5px;
+    width: 500px;
+    height: 100px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    position: fixed;
+    top: 100px;
+    right: 0;
+
+    background-color: rgba(255, 142, 142, 0.9);
+    border-radius: 2px;
+    padding: 10px 20px;
+
+    transform: translateY(-100%);
+    z-index: 10;
+    opacity: 0;
+    transition: ease all .5s;
+}
+.active-no-money-alert {
+    transform: translateY(0%);
+    opacity: 1;
 }
 .no-money-alert p {
-    color: #000;
-    font-size: 26px;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 500;
+    font-family: 'Albert Sans', sans-serif;
 }
 </style>

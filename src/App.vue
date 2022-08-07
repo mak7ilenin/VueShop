@@ -1,4 +1,5 @@
 <template>
+    <NoMoneyAlert/>
     <PurchaseAlert/>
     <div class="non-active-screen"></div>
     <div class="wrapper">
@@ -39,6 +40,7 @@
 <script>
 import router from '@/router';
 import PurchaseAlert from '@/components/PurchaseAlert';
+import NoMoneyAlert from '@/components/NoMoneyAlert';
 
 import { db, auth } from '@/firebase/init';
 import { onSnapshot, collection } from 'firebase/firestore';
@@ -46,8 +48,11 @@ import { onSnapshot, collection } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 export default {
-  name: 'App',
-  components: {PurchaseAlert},
+    name: 'App',
+    components: {
+        PurchaseAlert,
+        NoMoneyAlert
+    },
   data() {
     return {
       authUser: null,
