@@ -37,7 +37,7 @@ export default {
             {
                 this.empty = true;
                 return;
-            }else {
+            } else {
                 this.empty = false;
                 createUserWithEmailAndPassword(auth, this.email, this.password)
                     .then(() => {
@@ -50,7 +50,7 @@ export default {
                             cartItems: {}
                         });
                         router.replace('/log-in');
-                        // alert('Successfully registered!');
+                        alert('Successfully registered!', user);
                     })
                     .catch((e) => {
                         alert(e.message);
