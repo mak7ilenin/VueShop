@@ -18,6 +18,7 @@
             <div class="header__profile">
                 <div class="user__money" v-if="authed">{{ money }}$</div>
                 <div class="cart__container">
+                    <div class="cart__counter">2</div>
                     <router-link to="/my-cart" v-if="authed"><img src="@/assets/shopping-cart.png" alt="cart"></router-link>
                 </div>
                 <div class="profile__img">
@@ -222,6 +223,7 @@ header {
 .cart__container {
     width: 40%;
     height: 100%;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -230,6 +232,22 @@ header {
     width: 90px;
     object-fit: cover;
     cursor: pointer;
+}
+.cart__counter {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    background-color: #ff0000;
+    border-radius: 50%;
+    cursor: default;
 }
 .profile__img {
     width: 40%;
