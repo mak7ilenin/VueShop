@@ -18,7 +18,7 @@
             <div class="header__profile">
                 <div class="user__money" v-if="authed">{{ money }}$</div>
                 <div class="cart__container">
-                    <div class="cart__counter">2</div>
+                    <router-link to="/my-cart" v-if="authed"><div class="cart__counter">{{ counter }}</div></router-link>
                     <router-link to="/my-cart" v-if="authed"><img src="@/assets/shopping-cart.png" alt="cart"></router-link>
                 </div>
                 <div class="profile__img">
@@ -58,6 +58,7 @@ export default {
     return {
       authUser: null,
       authed: false,
+      counter: 0,
 
       username: null,
       money: 0
@@ -109,6 +110,12 @@ export default {
                 //     return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
                 // }
                 // this.money = truncate(thisUserMoney, 2);
+
+                let cartItems = authUser.cartItems;
+                this.counter = 0;
+                for (let i = 0; i < cartItems.length; i++) {
+                    this.counter += cartItems[i].quantity
+                }
 
                 this.authed = true;
                 $('.log-in').removeClass('unlogged');
@@ -238,7 +245,7 @@ header {
     height: 30px;
     position: absolute;
     top: 15px;
-    right: 20px;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -247,7 +254,7 @@ header {
     font-weight: bold;
     background-color: #ff0000;
     border-radius: 50%;
-    cursor: default;
+    cursor: pointer;
 }
 .profile__img {
     width: 40%;
