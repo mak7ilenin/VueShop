@@ -1,6 +1,7 @@
 <template>
     <NoMoneyAlert/>
     <PurchaseAlert/>
+    <DeleteAlert/>
     <div class="non-active-screen"></div>
     <div class="wrapper">
         <header>
@@ -42,6 +43,7 @@
 import router from '@/router';
 import PurchaseAlert from '@/components/PurchaseAlert';
 import NoMoneyAlert from '@/components/NoMoneyAlert';
+import DeleteAlert from '@/components/DeleteAlert';
 
 import { db, auth } from '@/firebase/init';
 import { onSnapshot, collection } from 'firebase/firestore';
@@ -51,9 +53,10 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 export default {
     name: 'App',
     components: {
-        PurchaseAlert,
-        NoMoneyAlert
-    },
+    PurchaseAlert,
+    NoMoneyAlert,
+    DeleteAlert
+},
   data() {
     return {
       authUser: null,
@@ -105,11 +108,6 @@ export default {
 
                 this.username = authUser.username;
                 this.money = authUser.money;
-                // let thisUserMoney = authUser.money;
-                // function truncate(number, index = 2) {
-                //     return +number.toString().slice(0, (number.toString().indexOf(".")) + (index + 1));
-                // }
-                // this.money = truncate(thisUserMoney, 2);
 
                 let cartItems = authUser.cartItems;
                 this.counter = 0;
