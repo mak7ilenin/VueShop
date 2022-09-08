@@ -7,6 +7,18 @@
             <a @click="buyOneProductBtn()">Buy one piece <span>({{ thisCart.price }}$)</span></a>
         </div>
     </div>
+    <div class="delete_alert">
+        <p>Choose the remove method</p>
+        <!-- <input type="number" min="1"> -->
+        <div class="buttons_container">
+            <a @click="deleteAllCarts()">
+                Remove all
+            </a>
+            <a @click="deleteOneCart()">
+                Remove
+            </a>
+        </div>
+    </div>
     <div class="cart">
         <div class="delete__cart" @click="deleteCart()">
             <p>&times;</p>
@@ -43,7 +55,9 @@ export default {
             methodWindow: false,
             thisCart: null,
             buyOne: false,
-            buyMany: false
+            buyMany: false,
+            deleteOne: false,
+            deleteMany: false
         }
     },
     props: {
@@ -68,6 +82,16 @@ export default {
             this.buyOne = true;
             this.buyFromCart();
             this.buyOne = false;
+        },
+        deleteAllCarts() {
+            this.deleteMany = true;
+            this.deleteFromCart();
+            this.deleteMany = false;
+        },
+        deleteOneCart() {
+            this.deleteOne = true;
+            this.deleteFromCart();
+            this.deleteOne = false;
         },
         buyFromCart() {
             this.thisCart = this.cartItem;
@@ -150,11 +174,14 @@ export default {
         },
         deleteCart() {
             const thisCartIndex = this.authUser.cartItems.findIndex(cart => cart.id == this.cartItem.id);
-            this.authUser.cartItems.splice(thisCartIndex, 1);
             
-            updateDoc(doc(db, 'users', this.authUser.id), {
-                cartItems: this.authUser.cartItems
-            });
+            $('.non-active-screen').css('display', 'unset');
+            $('.delete_alert').css('display', 'flex');
+            
+            // this.authUser.cartItems.splice(thisCartIndex, 1);
+            // updateDoc(doc(db, 'users', this.authUser.id), {
+            //     cartItems: this.authUser.cartItems
+            // });
         },
         closeChooseAlert() {
             $('.non-active-screen').removeAttr('style');
@@ -410,5 +437,50 @@ export default {
 }
 .cart__container .carts__container .cart .cart__image img {
     cursor: default;
+}
+
+.delete_alert {
+    width: 450px;
+    height: 200px;
+    display: none;
+    /* align-items: center; */
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #90eeb9;
+    border-radius: 5px;
+    padding: 20px 15px;
+    z-index: 25;
+    position: fixed;
+    left: calc((50vw - 50%) * -1);
+    top: calc((50vh - 50%) * -1);
+    transform: translate(calc(50vw - 50%), calc(50vh - 50%));
+}
+.delete_alert p {
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+}
+.delete_alert input {
+    height: 40px;
+    border-color: #a8a8a8;
+    border-radius: 5px;
+}
+.buttons_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.buttons_container a {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #000;
+    margin: 0 20px;
 }
 </style>

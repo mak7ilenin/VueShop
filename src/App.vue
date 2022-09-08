@@ -1,7 +1,7 @@
 <template>
     <NoMoneyAlert/>
     <PurchaseAlert/>
-    <DeleteAlert/>
+    <!-- <DeleteAlert/> -->
     <div class="non-active-screen"></div>
     <div class="wrapper">
         <header>

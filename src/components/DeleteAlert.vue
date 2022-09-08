@@ -17,13 +17,14 @@
 .delete_alert {
     width: 450px;
     height: 200px;
-    display: flex;
+    display: none;
     /* align-items: center; */
     flex-wrap: wrap;
     justify-content: center;
     background-color: #90eeb9;
     border-radius: 5px;
     padding: 20px 15px;
+    z-index: 25;
     position: fixed;
     left: calc((50vw - 50%) * -1);
     top: calc((50vh - 50%) * -1);
