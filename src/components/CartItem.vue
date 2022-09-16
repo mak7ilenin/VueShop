@@ -7,7 +7,8 @@
             <a @click="buyOneProductBtn()">Buy one piece <span>({{ thisCart.price }}$)</span></a>
         </div>
     </div>
-    <div class="delete_alert">
+    <div class="delete_alert" v-if="removeWindow">
+        <div class="close__choose__alert" @click="closeRemoveAlert()">&times;</div>
         <p>Choose the remove method</p>
         <!-- <input type="number" min="1"> -->
         <div class="buttons_container">
@@ -15,12 +16,12 @@
                 Remove all
             </a>
             <a @click="deleteOneCart()">
-                Remove
+                Remove one
             </a>
         </div>
     </div>
     <div class="cart">
-        <div class="delete__cart" @click="deleteCart()">
+        <div class="delete__cart" @click="deleteFromCart()">
             <p>&times;</p>
         </div>
         <div class="cart__decoration1"></div>
@@ -53,6 +54,7 @@ export default {
         return {
             multipleProduct: null,
             methodWindow: false,
+            removeWindow: false,
             thisCart: null,
             buyOne: false,
             buyMany: false,
@@ -172,20 +174,39 @@ export default {
                 }, 4500);
             }
         },
-        deleteCart() {
+        deleteFromCart() {
+            this.removeWindow = true;
             const thisCartIndex = this.authUser.cartItems.findIndex(cart => cart.id == this.cartItem.id);
             
             $('.non-active-screen').css('display', 'unset');
-            $('.delete_alert').css('display', 'flex');
-            
-            // this.authUser.cartItems.splice(thisCartIndex, 1);
-            // updateDoc(doc(db, 'users', this.authUser.id), {
-            //     cartItems: this.authUser.cartItems
-            // });
+            if(this.deleteOne) {
+                this.cartItem.quantity -= 1;  
+                if(this.cartItem.quantity === 0) {
+                    this.authUser.cartItems.splice(thisCartIndex, 1);
+                    console.log(this.authUser.cartItem);
+                }
+                updateDoc(doc(db, 'users', this.authUser.id), {
+                    cartItems: this.authUser.cartItems
+                });
+                this.removeWindow = false;
+                $('.non-active-screen').removeAttr('style');
+            }
+            if(this.deleteMany) {
+                this.authUser.cartItems.splice(thisCartIndex, 1);
+                updateDoc(doc(db, 'users', this.authUser.id), {
+                    cartItems: this.authUser.cartItems
+                });
+                this.removeWindow = false;
+                $('.non-active-screen').removeAttr('style');
+            }
         },
         closeChooseAlert() {
             $('.non-active-screen').removeAttr('style');
             this.methodWindow = false;
+        },
+        closeRemoveAlert() {
+            $('.non-active-screen').removeAttr('style');
+            this.removeWindow = false;
         }
     },
     created: async function() {   
@@ -441,8 +462,8 @@ export default {
 
 .delete_alert {
     width: 450px;
-    height: 200px;
-    display: none;
+    height: 150px;
+    display: flex;
     /* align-items: center; */
     flex-wrap: wrap;
     justify-content: center;
