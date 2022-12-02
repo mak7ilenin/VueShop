@@ -1,12 +1,10 @@
 {
-  "homepage": "http://SvinDzjuba.github.io/VueShop",
+  "homepage": "https://svindzjuba.github.io/VueShop/",
   "name": "web-shop",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "build": "vue-cli-service build"
   },
   "dependencies": {
@@ -18,7 +16,6 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "gh-pages": "^4.0.0"
+    "@vue/cli-service": "~5.0.0"
   }
 }
